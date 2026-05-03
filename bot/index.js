@@ -112,6 +112,15 @@ client.on('messageCreate', async (message) => {
   }
 });
 
+// Handle button interactions (for tickets, etc.)
+client.on('interactionCreate', async (interaction) => {
+  if (interaction.isButton()) {
+    await handleButton(interaction).catch(e => console.error('Button error:', e));
+  } else if (interaction.isModalSubmit()) {
+    await handleModal(interaction).catch(e => console.error('Modal error:', e));
+  }
+});
+
 client.login(config.token);
 
 // Serveur HTTP minimal pour Render (health check)

@@ -34,12 +34,12 @@ export async function execute(message, args) {
 
   // Create ticket channel
   const guild = message.guild;
-  const category = message.channel.parent;
+  const ticketCategoryId = '1479080682784555134';
 
   const ticketChannel = await guild.channels.create({
     name: `ticket-${member.user.username}-${service.toLowerCase()}`,
     type: ChannelType.GuildText,
-    parent: category?.id,
+    parent: ticketCategoryId,
     permissionOverwrites: [
       { id: guild.id, deny: [PermissionFlagsBits.ViewChannel] },
       { id: member.id, allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages, PermissionFlagsBits.ReadMessageHistory] },
