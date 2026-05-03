@@ -1,0 +1,146 @@
+services:
+  - type: worker
+    name: raizen-gen-bot
+    runtime: node
+    buildCommand: npm install
+    startCommand: node bot/index.js
+    envVars:
+      - key: DISCORD_TOKEN
+        sync: false
+      - key: CLIENT_ID
+        sync: false
+      - key: CLIENT_SECRET
+        sync: false
+      - key: GUILD_ID
+        sync: false
+      - key: TICKET_CHANNEL
+        sync: false
+      - key: LOG_CHANNEL
+        sync: false
+      - key: FREE_GEN_CHANNEL
+        sync: false
+      - key: PREMIUM_GEN_CHANNEL
+        sync: false
+      - key: BOOSTER_GEN_CHANNEL
+        sync: false
+      - key: EXTREME_GEN_CHANNEL
+        sync: false
+      - key: STOCK_LOG_CHANNEL
+        sync: false
+      - key: ROLE_HELPER
+        sync: false
+      - key: ROLE_STAFF
+        sync: false
+      - key: ROLE_TRAINED_MOD
+        sync: false
+      - key: ROLE_MODERATOR
+        sync: false
+      - key: ROLE_ADMIN
+        sync: false
+      - key: ROLE_VERIFIED
+        sync: false
+      - key: ROLE_MEMBER
+        sync: false
+      - key: ROLE_FOUNDER
+        sync: false
+      - key: ROLE_SUPER_ADMIN
+        sync: false
+      - key: ROLE_MEGA_DROPER
+        sync: false
+      - key: ROLE_HEAD_ADMIN
+        sync: false
+      - key: ROLE_BASIC_GEN
+        sync: false
+      - key: ROLE_PREMIUM_GEN
+        sync: false
+      - key: ROLE_BOOSTER_GEN
+        sync: false
+      - key: ROLE_EXTREME_GEN
+        sync: false
+      - key: ROLE_UNVERIFIED
+        sync: false
+      - key: GITHUB_TOKEN
+        sync: false
+      - key: GITHUB_OWNER
+        sync: false
+      - key: GITHUB_REPO
+        sync: false
+      - key: SESSION_SECRET
+        sync: false
+      - key: BOT_PORT
+        value: "3001"
+
+  - type: web
+    name: raizen-gen-web
+    runtime: node
+    buildCommand: npm install
+    startCommand: node web/server.js
+    envVars:
+      - key: DISCORD_TOKEN
+        sync: false
+      - key: CLIENT_ID
+        sync: false
+      - key: CLIENT_SECRET
+        sync: false
+      - key: GUILD_ID
+        sync: false
+      - key: TICKET_CHANNEL
+        sync: false
+      - key: LOG_CHANNEL
+        sync: false
+      - key: FREE_GEN_CHANNEL
+        sync: false
+      - key: PREMIUM_GEN_CHANNEL
+        sync: false
+      - key: BOOSTER_GEN_CHANNEL
+        sync: false
+      - key: EXTREME_GEN_CHANNEL
+        sync: false
+      - key: STOCK_LOG_CHANNEL
+        sync: false
+      - key: ROLE_HELPER
+        sync: false
+      - key: ROLE_STAFF
+        sync: false
+      - key: ROLE_TRAINED_MOD
+        sync: false
+      - key: ROLE_MODERATOR
+        sync: false
+      - key: ROLE_ADMIN
+        sync: false
+      - key: ROLE_VERIFIED
+        sync: false
+      - key: ROLE_MEMBER
+        sync: false
+      - key: ROLE_FOUNDER
+        sync: false
+      - key: ROLE_SUPER_ADMIN
+        sync: false
+      - key: ROLE_MEGA_DROPER
+        sync: false
+      - key: ROLE_HEAD_ADMIN
+        sync: false
+      - key: ROLE_BASIC_GEN
+        sync: false
+      - key: ROLE_PREMIUM_GEN
+        sync: false
+      - key: ROLE_BOOSTER_GEN
+        sync: false
+      - key: ROLE_EXTREME_GEN
+        sync: false
+      - key: ROLE_UNVERIFIED
+        sync: false
+      - key: GITHUB_TOKEN
+        sync: false
+      - key: GITHUB_OWNER
+        sync: false
+      - key: GITHUB_REPO
+        sync: false
+      - key: SESSION_SECRET
+        sync: false
+      - key: REDIRECT_URI
+        sync: false
+      - key: PORT
+        value: "3000"
+      - key: BOT_PORT
+        value: "3001"

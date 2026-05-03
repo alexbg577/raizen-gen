@@ -1,0 +1,20 @@
+<nav class="navbar">
+  <a href="/" class="nav-logo">RAIZEN<span class="accent">GEN</span></a>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/gen">Generate</a>
+    <a href="/leaderboard">Leaderboard</a>
+    <a href="/giveaways">Giveaways</a>
+    <% if (user) { %>
+      <a href="/dashboard">Dashboard</a>
+      <div class="nav-user">
+        <img src="https://cdn.discordapp.com/avatars/<%= user.id %>/<%= user.avatar %>.png" alt="avatar" onerror="this.src='/img/default.png'">
+        <span><%= user.username %></span>
+        <a href="/logout" class="btn btn-sm">Logout</a>
+      </div>
+    <% } else { %>
+      <a href="/login" class="btn btn-primary btn-sm">Login</a>
+    <% } %>
+  </div>
+  <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')">☰</button>
+</nav>

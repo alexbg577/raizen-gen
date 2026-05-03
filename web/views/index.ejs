@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Raizen Gen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<%- include('partials/nav') %>
+<main>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <div class="badge">✦ Premium Account Generator</div>
+      <h1>RAIZEN <span class="accent">GEN</span></h1>
+      <p class="hero-sub">The most advanced account generation platform.<br>Fast. Reliable. Premium.</p>
+      <div class="hero-btns">
+        <% if (user) { %>
+          <a href="/gen" class="btn btn-primary">Generate Now →</a>
+          <a href="/dashboard" class="btn btn-ghost">Dashboard</a>
+        <% } else { %>
+          <a href="/login" class="btn btn-primary">Login with Discord →</a>
+          <a href="https://discord.gg/PPdYTSFuby" target="_blank" class="btn btn-ghost">Join Discord</a>
+        <% } %>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <span class="stat-num"><%= (counts.free||0)+(counts.premium||0)+(counts.booster||0)+(counts.extreme||0) %></span>
+        <span class="stat-label">Total Accounts</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-num"><%= guild.memberCount %></span>
+        <span class="stat-label">Members</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-num"><%= guild.online %></span>
+        <span class="stat-label">Online</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- STOCK CARDS -->
+  <section class="section">
+    <h2 class="section-title">Live <span class="accent">Stock</span></h2>
+    <div class="stock-grid">
+      <div class="stock-card free">
+        <div class="stock-card-header">
+          <span class="tier-dot"></span><span>Free</span>
+        </div>
+        <div class="stock-count"><%= counts.free || 0 %></div>
+        <div class="stock-label">accounts available</div>
+      </div>
+      <div class="stock-card premium">
+        <div class="stock-card-header">
+          <span class="tier-dot"></span><span>Premium</span>
+        </div>
+        <div class="stock-count"><%= counts.premium || 0 %></div>
+        <div class="stock-label">accounts available</div>
+      </div>
+      <div class="stock-card booster">
+        <div class="stock-card-header">
+          <span class="tier-dot"></span><span>Booster</span>
+        </div>
+        <div class="stock-count"><%= counts.booster || 0 %></div>
+        <div class="stock-label">accounts available</div>
+      </div>
+      <div class="stock-card extreme">
+        <div class="stock-card-header">
+          <span class="tier-dot"></span><span>Extreme</span>
+        </div>
+        <div class="stock-count"><%= counts.extreme || 0 %></div>
+        <div class="stock-label">accounts available</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="section features-section">
+    <h2 class="section-title">Why <span class="accent">Raizen?</span></h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>Instant Delivery</h3>
+        <p>Accounts delivered instantly via ticket system, directly to your DMs.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <h3>Secure System</h3>
+        <p>Role-based access control. Your tier, your privileges. Always safe.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎯</div>
+        <h3>Multi-Tier</h3>
+        <p>Four tiers to fit every need: Free, Premium, Booster, and Extreme.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🏆</div>
+        <h3>Staff Vouches</h3>
+        <p>Rate your staff. Top performers get promoted automatically.</p>
+      </div>
+    </div>
+  </section>
+</main>
+<%- include('partials/footer') %>
+<script src="/js/main.js"></script>
+</body>
+</html>

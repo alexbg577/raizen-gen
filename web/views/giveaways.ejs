@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Giveaways — Raizen Gen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<%- include('partials/nav') %>
+<main class="page-main">
+  <div class="page-header">
+    <h1>🎉 <span class="accent">Giveaways</span></h1>
+    <p>Active and past giveaways</p>
+  </div>
+  <div class="giveaways-grid">
+    <% if (!giveaways.length) { %>
+      <div class="empty-state">No giveaways at the moment. Stay tuned!</div>
+    <% } %>
+    <% giveaways.forEach(g => { %>
+      <div class="giveaway-card <%= g.ended ? 'ended' : 'active' %>">
+        <div class="gw-status"><%= g.ended ? '🔴 Ended' : '🟢 Active' %></div>
+        <h3 class="gw-prize"><%= g.prize %></h3>
+        <div class="gw-meta">
+          <span>👥 <%= g.entries.length %> entries</span>
+          <span>🏆 <%= g.winners %> winner(s)</span>
+        </div>
+        <div class="gw-time">
+          <% if (g.ended) { %>
+            Ended
+          <% } else { %>
+            Ends <span class="countdown" data-ends="<%= g.endsAt %>"></span>
+          <% } %>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+</main>
+<%- include('partials/footer') %>
+<script src="/js/main.js"></script>
+</body>
+</html>

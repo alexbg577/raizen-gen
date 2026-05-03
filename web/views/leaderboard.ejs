@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leaderboard — Raizen Gen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<%- include('partials/nav') %>
+<main class="page-main">
+  <div class="page-header">
+    <h1>Vouch <span class="accent">Leaderboard</span></h1>
+    <p>Top performers in our staff team</p>
+  </div>
+  <div class="leaderboard-container">
+    <% if (!leaderboard.length) { %>
+      <div class="empty-state">No vouches recorded yet.</div>
+    <% } %>
+    <% leaderboard.forEach((entry, i) => { %>
+      <div class="lb-row <%= i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : '' %>">
+        <div class="lb-rank">
+          <% if (i === 0) { %> 🥇 <% } else if (i === 1) { %> 🥈 <% } else if (i === 2) { %> 🥉 <% } else { %> #<%= i+1 %> <% } %>
+        </div>
+        <div class="lb-user">
+          <span class="lb-id"><%= entry.id %></span>
+        </div>
+        <div class="lb-vouches"><%= entry.count %> <span>vouches</span></div>
+      </div>
+    <% }) %>
+  </div>
+</main>
+<%- include('partials/footer') %>
+<script src="/js/main.js"></script>
+</body>
+</html>

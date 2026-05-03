@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generate — Raizen Gen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<%- include('partials/nav') %>
+<main class="page-main">
+  <div class="page-header">
+    <h1>Generate <span class="accent">Account</span></h1>
+    <p>Select your tier and service to generate an account.</p>
+  </div>
+
+  <% if (message) { %>
+    <div class="alert alert-<%= message.type %>">
+      <%= message.text %>
+      <% if (message.account) { %>
+        <div class="account-result">
+          <div class="account-field">
+            <span class="account-label">Service</span>
+            <span class="account-value"><%= message.account.service %></span>
+          </div>
+          <div class="account-field">
+            <span class="account-label">Tier</span>
+            <span class="account-value tier-badge <%= message.account.tier %>"><%= message.account.tier %></span>
+          </div>
+          <div class="account-field">
+            <span class="account-label">Email</span>
+            <code class="account-value"><%= message.account.email %></code>
+            <button class="copy-btn" onclick="copyText('<%= message.account.email %>')">Copy</button>
+          </div>
+          <div class="account-field">
+            <span class="account-label">Password</span>
+            <code class="account-value"><%= message.account.password %></code>
+            <button class="copy-btn" onclick="copyText('<%= message.account.password %>')">Copy</button>
+          </div>
+        </div>
+      <% } %>
+    </div>
+  <% } %>
+
+  <div class="gen-container">
+    <form method="POST" action="/gen" class="gen-form">
+      <div class="form-group">
+        <label>Service Name</label>
+        <input type="text" name="service" placeholder="e.g. Netflix, Spotify, Disney+" required>
+      </div>
+      <div class="form-group">
+        <label>Tier</label>
+        <div class="tier-selector">
+          <label class="tier-option free">
+            <input type="radio" name="tier" value="free">
+            <div class="tier-card">
+              <span class="tier-dot"></span>
+              <span class="tier-name">Free</span>
+              <span class="tier-count"><%= counts.free || 0 %> available</span>
+            </div>
+          </label>
+          <label class="tier-option premium">
+            <input type="radio" name="tier" value="premium">
+            <div class="tier-card">
+              <span class="tier-dot"></span>
+              <span class="tier-name">Premium</span>
+              <span class="tier-count"><%= counts.premium || 0 %> available</span>
+            </div>
+          </label>
+          <label class="tier-option booster">
+            <input type="radio" name="tier" value="booster">
+            <div class="tier-card">
+              <span class="tier-dot"></span>
+              <span class="tier-name">Booster</span>
+              <span class="tier-count"><%= counts.booster || 0 %> available</span>
+            </div>
+          </label>
+          <label class="tier-option extreme">
+            <input type="radio" name="tier" value="extreme">
+            <div class="tier-card">
+              <span class="tier-dot"></span>
+              <span class="tier-name">Extreme</span>
+              <span class="tier-count"><%= counts.extreme || 0 %> available</span>
+            </div>
+          </label>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary btn-full">Generate Account →</button>
+    </form>
+  </div>
+</main>
+<%- include('partials/footer') %>
+<script src="/js/main.js"></script>
+</body>
+</html>

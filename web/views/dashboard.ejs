@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — Raizen Gen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<%- include('partials/nav') %>
+<main class="page-main">
+  <div class="page-header">
+    <h1>Welcome, <span class="accent"><%= user.username %></span></h1>
+    <p>Your personal dashboard</p>
+  </div>
+
+  <div class="dashboard-grid">
+    <div class="dash-card">
+      <div class="dash-card-icon">👤</div>
+      <h3>Profile</h3>
+      <div class="dash-info">
+        <img src="https://cdn.discordapp.com/avatars/<%= user.id %>/<%= user.avatar %>.png" class="dash-avatar" onerror="this.src='/img/default.png'">
+        <div>
+          <div class="dash-username"><%= user.username %></div>
+          <div class="dash-id">ID: <%= user.id %></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dash-card">
+      <div class="dash-card-icon">📦</div>
+      <h3>Stock Overview</h3>
+      <div class="dash-stock">
+        <div class="dash-stock-row free"><span>Free</span><strong><%= counts.free || 0 %></strong></div>
+        <div class="dash-stock-row premium"><span>Premium</span><strong><%= counts.premium || 0 %></strong></div>
+        <div class="dash-stock-row booster"><span>Booster</span><strong><%= counts.booster || 0 %></strong></div>
+        <div class="dash-stock-row extreme"><span>Extreme</span><strong><%= counts.extreme || 0 %></strong></div>
+      </div>
+    </div>
+
+    <div class="dash-card">
+      <div class="dash-card-icon">🌐</div>
+      <h3>Server Info</h3>
+      <div class="dash-info-list">
+        <div class="dash-info-row"><span>Server</span><strong><%= guild.name %></strong></div>
+        <div class="dash-info-row"><span>Members</span><strong><%= guild.memberCount %></strong></div>
+        <div class="dash-info-row"><span>Online</span><strong class="online"><%= guild.online %></strong></div>
+      </div>
+    </div>
+
+    <div class="dash-card dash-actions">
+      <div class="dash-card-icon">⚡</div>
+      <h3>Quick Actions</h3>
+      <div class="dash-btns">
+        <a href="/gen" class="btn btn-primary">Generate Account</a>
+        <a href="/leaderboard" class="btn btn-ghost">Leaderboard</a>
+        <a href="/giveaways" class="btn btn-ghost">Giveaways</a>
+        <a href="https://discord.gg/PPdYTSFuby" target="_blank" class="btn btn-ghost">Discord Server</a>
+      </div>
+    </div>
+  </div>
+</main>
+<%- include('partials/footer') %>
+<script src="/js/main.js"></script>
+</body>
+</html>
