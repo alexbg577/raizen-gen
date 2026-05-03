@@ -111,3 +111,11 @@ client.on('messageCreate', async (message) => {
 });
 
 client.login(config.token);
+
+// Serveur HTTP minimal pour Render (health check)
+import http from 'http';
+const port = process.env.PORT || 3000;
+http.createServer((req, res) => {
+  res.writeHead(200);
+  res.end('OK');
+}).listen(port, () => console.log(`🌐 Health check server on port ${port}`));
