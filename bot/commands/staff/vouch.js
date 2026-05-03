@@ -1,35 +1,33 @@
-import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
+import { EmbedBuilder } from 'discord.js';
 import { isAdmin } from '../../utils/permissions.js';
 import { addVouch, removeVouch, getUserVouches, canVouch } from '../../utils/github.js';
 import { config } from '../../../shared/config.js';
 import { sendLog, LogColors } from '../../utils/logger.js';
 
-export const data = new SlashCommandBuilder()
-  .setName('vouch')
-  .setDescription('Vouch for a staff member')
-  .addUserOption(o => o.setName('user').setDescription('Staff member to vouch').setRequired(true))
-  .addIntegerOption(o => o.setName('amount').setDescription('Amount (Admin only, default 1)').setRequired(false).setMinValue(1).setMaxValue(50));
+export const name = 'vouch';
 
-export async function execute(interaction) {
-  const target = interaction.options.getUser('user');
-  const amount = interaction.options.getInteger('amount') || 1;
-  const giver = interaction.user;
-  const admin = isAdmin(interaction.member);
+export async function execute(message, args) {
+  const target = message.mentions.users.first();
+  if (!target) {
+    return message.reply('❌ Usage: `!vouch @user [amount]`');
+  }
+
+  const amount = parseInt(args[1]) || 1;
+  const giver = message.author;
+  const admin = isAdmin(message.member);
 
   if (target.id === giver.id) {
-    return interaction.reply({ content: '❌ You cannot vouch yourself.', ephemeral: true });
+    return message.reply('❌ You cannot vouch yourself.');
   }
 
   if (amount > 1 && !admin) {
-    return interaction.reply({ content: '❌ Only admins can add more than 1 vouch at a time.', ephemeral: true });
+    return message.reply('❌ Only admins can add more than 1 vouch at a time.');
   }
-
-  await interaction.deferReply({ ephemeral: false });
 
   if (!admin) {
     const ok = await canVouch(giver.id, target.id);
     if (!ok) {
-      return interaction.editReply({ content: '❌ You already vouched this person in the last hour.' });
+      return message.reply('❌ You already vouched this person in the last hour.');
     }
   }
 
@@ -37,7 +35,7 @@ export async function execute(interaction) {
   const targetVouches = updated[target.id]?.count || 0;
 
   // Check promotion thresholds
-  const guild = interaction.guild;
+  const guild = message.guild;
   const member = await guild.members.fetch(target.id).catch(() => null);
   let promoted = null;
 
@@ -70,9 +68,9 @@ export async function execute(interaction) {
     embed.addFields({ name: '🎉 Promoted!', value: `${target} has been promoted to **${promoted}**!`, inline: false });
   }
 
-  await interaction.editReply({ embeds: [embed] });
+  await message.reply({ embeds: [embed] });
 
-  await sendLog(interaction.client, {
+  await sendLog(message.client, {
     color: LogColors.info,
     title: '⭐ Vouch Added',
     description: `**${giver.tag}** vouched for **${target.tag}** (now **${targetVouches}** vouches)${promoted ? `\n🎉 Promoted to **${promoted}**` : ''}`,

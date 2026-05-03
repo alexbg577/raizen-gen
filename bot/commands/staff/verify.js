@@ -1,17 +1,14 @@
-import { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } from 'discord.js';
+import { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } from 'discord.js';
 import { isFounder } from '../../utils/permissions.js';
 
-export const data = new SlashCommandBuilder()
-  .setName('verify')
-  .setDescription('Send verification panel (Founder only)')
-  .addUserOption(o => o.setName('user').setDescription('Member to verify').setRequired(false));
+export const name = 'verify';
 
-export async function execute(interaction) {
-  if (!isFounder(interaction.member)) {
-    return interaction.reply({ content: '❌ Only Founders can use this command.', ephemeral: true });
+export async function execute(message, args) {
+  if (!isFounder(message.member)) {
+    return message.reply('❌ Only Founders can use this command.');
   }
 
-  const target = interaction.options.getUser('user');
+  const target = message.mentions.users.first();
 
   const embed = new EmbedBuilder()
     .setColor(0x5865F2)
@@ -28,5 +25,5 @@ export async function execute(interaction) {
   const row = new ActionRowBuilder().addComponents(btn);
 
   const content = target ? `${target}` : null;
-  await interaction.reply({ content, embeds: [embed], components: [row] });
+  await message.reply({ content, embeds: [embed], components: [row] });
 }

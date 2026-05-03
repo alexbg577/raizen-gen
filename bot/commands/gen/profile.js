@@ -1,15 +1,11 @@
-import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
+import { EmbedBuilder } from 'discord.js';
 import { getUserVouches } from '../../utils/github.js';
 import { getTier, isStaff, isAdmin, isMod } from '../../utils/permissions.js';
 
-export const data = new SlashCommandBuilder()
-  .setName('profile')
-  .setDescription('View your profile or another member\'s')
-  .addUserOption(o => o.setName('user').setDescription('User to view').setRequired(false));
+export const name = 'profile';
 
-export async function execute(interaction) {
-  const target = interaction.options.getMember('user') || interaction.member;
-  await interaction.deferReply();
+export async function execute(message, args) {
+  const target = message.mentions.members.first() || message.member;
 
   const vouchData = await getUserVouches(target.id);
   const vouches = vouchData.count || 0;
@@ -35,5 +31,5 @@ export async function execute(interaction) {
     .setFooter({ text: 'Raizen Gen' })
     .setTimestamp();
 
-  await interaction.editReply({ embeds: [embed] });
+  await message.reply({ embeds: [embed] });
 }

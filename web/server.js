@@ -5,10 +5,9 @@ import { Strategy as DiscordStrategy } from 'passport-discord';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import axios from 'axios';
 import multer from 'multer';
 import AdmZip from 'adm-zip';
-import { getAllStockCounts, getStockCount, popAccount, addStock, getVouches, getGiveaways, getData } from '../bot/utils/github.js';
+import { getAllStockCounts, getStockCount, popAccount, addStock, getVouches, getGiveaways } from '../bot/utils/github.js';
 import { config } from '../shared/config.js';
 
 dotenv.config();
@@ -50,16 +49,12 @@ function isAuth(req, res, next) {
   res.redirect('/login');
 }
 
-async function getBotData() {
-  try {
-    const res = await axios.get(`http://localhost:${process.env.BOT_PORT || 3001}/api/guild`, { timeout: 2000 });
-    return res.data;
-  } catch { return { name: 'Raizen Gen', memberCount: '—', online: '—' }; }
-}
+// Static guild data since we no longer have bot HTTP bridge
+const guild = { name: 'Raizen Gen', memberCount: '—', online: '—' };
 
 // ── ROUTES ──
 app.get('/', async (req, res) => {
-  const [counts, guild] = await Promise.all([getAllStockCounts(), getBotData()]);
+  const counts = await getAllStockCounts();
   res.render('index', { user: req.user, counts, guild });
 });
 
@@ -68,7 +63,7 @@ app.get('/auth/callback', passport.authenticate('discord', { failureRedirect: '/
 app.get('/logout', (req, res) => { req.logout(() => res.redirect('/')); });
 
 app.get('/dashboard', isAuth, async (req, res) => {
-  const [counts, guild] = await Promise.all([getAllStockCounts(), getBotData()]);
+  const counts = await getAllStockCounts();
   res.render('dashboard', { user: req.user, counts, guild });
 });
 

@@ -1,98 +1,93 @@
 import {
-  SlashCommandBuilder, EmbedBuilder, ButtonBuilder,
+  EmbedBuilder, ButtonBuilder,
   ButtonStyle, ActionRowBuilder
 } from 'discord.js';
 import { isAdmin } from '../../utils/permissions.js';
 import { saveGiveaway, deleteGiveaway, getGiveaways } from '../../utils/github.js';
 import { sendLog, LogColors } from '../../utils/logger.js';
 
-export const giveaway = {
-  data: new SlashCommandBuilder()
-    .setName('giveaway')
-    .setDescription('Giveaway management')
-    .addSubcommand(s => s.setName('create').setDescription('Create a giveaway')
-      .addStringOption(o => o.setName('prize').setDescription('Prize').setRequired(true))
-      .addIntegerOption(o => o.setName('duration').setDescription('Duration in minutes').setRequired(true).setMinValue(1))
-      .addIntegerOption(o => o.setName('winners').setDescription('Number of winners').setRequired(false).setMinValue(1).setMaxValue(10))
-    )
-    .addSubcommand(s => s.setName('end').setDescription('End a giveaway early')
-      .addStringOption(o => o.setName('message_id').setDescription('Giveaway message ID').setRequired(true))
-    )
-    .addSubcommand(s => s.setName('reroll').setDescription('Reroll a giveaway')
-      .addStringOption(o => o.setName('message_id').setDescription('Giveaway message ID').setRequired(true))
-    ),
+export const name = 'giveaway';
 
-  async execute(interaction) {
-    if (!isAdmin(interaction.member)) {
-      return interaction.reply({ content: '❌ Admin only.', ephemeral: true });
-    }
-    const sub = interaction.options.getSubcommand();
-
-    if (sub === 'create') {
-      const prize = interaction.options.getString('prize');
-      const duration = interaction.options.getInteger('duration');
-      const winners = interaction.options.getInteger('winners') || 1;
-      const endsAt = Date.now() + duration * 60 * 1000;
-
-      const embed = new EmbedBuilder()
-        .setColor(0xFEE75C)
-        .setTitle('🎉 GIVEAWAY')
-        .setDescription(`**Prize:** ${prize}\n\n**Winners:** ${winners}\n**Ends:** <t:${Math.floor(endsAt / 1000)}:R>\n\nClick the button below to enter!`)
-        .setFooter({ text: `Hosted by ${interaction.user.tag}` })
-        .setTimestamp(endsAt);
-
-      const btn = new ButtonBuilder()
-        .setCustomId('giveaway_enter')
-        .setLabel('🎉 Enter')
-        .setStyle(ButtonStyle.Primary);
-
-      const row = new ActionRowBuilder().addComponents(btn);
-      await interaction.reply({ content: '✅ Giveaway created!', ephemeral: true });
-      const msg = await interaction.channel.send({ embeds: [embed], components: [row] });
-
-      await saveGiveaway({
-        messageId: msg.id,
-        channelId: interaction.channelId,
-        prize,
-        winners,
-        endsAt,
-        entries: [],
-        ended: false,
-        hostId: interaction.user.id,
-      });
-
-      // Auto-end
-      setTimeout(() => endGiveaway(interaction.client, msg.id, interaction.channelId), duration * 60 * 1000);
-
-      await sendLog(interaction.client, {
-        color: LogColors.info,
-        title: '🎉 Giveaway Started',
-        description: `**${prize}** — ${winners} winner(s) — ends <t:${Math.floor(endsAt / 1000)}:R>`,
-      });
-    }
-
-    if (sub === 'end') {
-      const msgId = interaction.options.getString('message_id');
-      await interaction.deferReply({ ephemeral: true });
-      await endGiveaway(interaction.client, msgId, interaction.channelId);
-      await interaction.editReply({ content: '✅ Giveaway ended.' });
-    }
-
-    if (sub === 'reroll') {
-      const msgId = interaction.options.getString('message_id');
-      await interaction.deferReply({ ephemeral: true });
-      const giveaways = await getGiveaways();
-      const g = giveaways[msgId];
-      if (!g || !g.ended) return interaction.editReply({ content: '❌ Giveaway not found or not ended.' });
-      const newWinners = pickWinners(g.entries, g.winners);
-      const channel = interaction.guild.channels.cache.get(g.channelId || interaction.channelId);
-      if (channel) {
-        await channel.send({ content: `🎉 **Reroll!** New winner(s): ${newWinners.map(id => `<@${id}>`).join(', ')} — Prize: **${g.prize}**` });
-      }
-      await interaction.editReply({ content: '✅ Rerolled.' });
-    }
+export async function execute(message, args) {
+  if (!isAdmin(message.member)) {
+    return message.reply('❌ Admin only.');
   }
-};
+
+  const sub = args[0];
+  if (!sub) {
+    return message.reply('❌ Usage: `!giveaway <create|end|reroll> [args]`');
+  }
+
+  if (sub === 'create') {
+    const prize = args.slice(1, -2).join(' ');
+    const duration = parseInt(args[args.length - 2]);
+    const winners = parseInt(args[args.length - 1]) || 1;
+
+    if (!prize || !duration) {
+      return message.reply('❌ Usage: `!giveaway create <prize> <duration_min> [winners]`');
+    }
+
+    const endsAt = Date.now() + duration * 60 * 1000;
+
+    const embed = new EmbedBuilder()
+      .setColor(0xFEE75C)
+      .setTitle('🎉 GIVEAWAY')
+      .setDescription(`**Prize:** ${prize}\n\n**Winners:** ${winners}\n**Ends:** <t:${Math.floor(endsAt / 1000)}:R>\n\nClick the button below to enter!`)
+      .setFooter({ text: `Hosted by ${message.author.tag}` })
+      .setTimestamp(endsAt);
+
+    const btn = new ButtonBuilder()
+      .setCustomId('giveaway_enter')
+      .setLabel('🎉 Enter')
+      .setStyle(ButtonStyle.Primary);
+
+    const row = new ActionRowBuilder().addComponents(btn);
+    const msg = await message.channel.send({ embeds: [embed], components: [row] });
+
+    await saveGiveaway({
+      messageId: msg.id,
+      channelId: message.channel.id,
+      prize,
+      winners,
+      endsAt,
+      entries: [],
+      ended: false,
+      hostId: message.author.id,
+    });
+
+    // Auto-end
+    setTimeout(() => endGiveaway(message.client, msg.id, message.channel.id), duration * 60 * 1000);
+
+    await sendLog(message.client, {
+      color: LogColors.info,
+      title: '🎉 Giveaway Started',
+      description: `**${prize}** — ${winners} winner(s) — ends <t:${Math.floor(endsAt / 1000)}:R>`,
+    });
+
+    await message.reply('✅ Giveaway created!');
+  }
+
+  if (sub === 'end') {
+    const msgId = args[1];
+    if (!msgId) return message.reply('❌ Usage: `!giveaway end <message_id>`');
+    await endGiveaway(message.client, msgId, message.channel.id);
+    await message.reply('✅ Giveaway ended.');
+  }
+
+  if (sub === 'reroll') {
+    const msgId = args[1];
+    if (!msgId) return message.reply('❌ Usage: `!giveaway reroll <message_id>`');
+    const giveaways = await getGiveaways();
+    const g = giveaways[msgId];
+    if (!g || !g.ended) return message.reply('❌ Giveaway not found or not ended.');
+    const newWinners = pickWinners(g.entries, g.winners);
+    const channel = message.guild.channels.cache.get(g.channelId || message.channel.id);
+    if (channel) {
+      await channel.send({ content: `🎉 **Reroll!** New winner(s): ${newWinners.map(id => `<@${id}>`).join(', ')} — Prize: **${g.prize}**` });
+    }
+    await message.reply('✅ Rerolled.');
+  }
+}
 
 function pickWinners(entries, count) {
   const shuffled = [...entries].sort(() => Math.random() - 0.5);

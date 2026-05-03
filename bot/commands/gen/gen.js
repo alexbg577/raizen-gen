@@ -1,5 +1,5 @@
 import {
-  SlashCommandBuilder, EmbedBuilder, ButtonBuilder,
+  EmbedBuilder, ButtonBuilder,
   ButtonStyle, ActionRowBuilder, ChannelType, PermissionFlagsBits
 } from 'discord.js';
 import { config } from '../../../shared/config.js';
@@ -7,35 +7,34 @@ import { canGenInChannel, getTierFromChannel, isStaff } from '../../utils/permis
 import { popAccount, createTicket, getStockCount } from '../../utils/github.js';
 import { sendLog, LogColors } from '../../utils/logger.js';
 
-export const data = new SlashCommandBuilder()
-  .setName('gen')
-  .setDescription('Generate an account')
-  .addStringOption(o => o.setName('service').setDescription('Service name (ex: Netflix)').setRequired(true));
+export const name = 'gen';
 
-export async function execute(interaction) {
-  const member = interaction.member;
-  const channelId = interaction.channelId;
-  const service = interaction.options.getString('service');
+export async function execute(message, args) {
+  const member = message.member;
+  const channelId = message.channel.id;
+  const service = args[0];
   const tier = getTierFromChannel(channelId);
 
+  if (!service) {
+    return message.reply('❌ Usage: `!gen <service>` (ex: `!gen Netflix`)');
+  }
+
   if (!tier) {
-    return interaction.reply({ content: '❌ Use this command in a gen channel.', ephemeral: true });
+    return message.reply('❌ Utilise cette commande dans un canal de gen.');
   }
 
   if (!canGenInChannel(member, channelId)) {
-    return interaction.reply({ content: `❌ You don't have the required role to gen in this channel.`, ephemeral: true });
+    return message.reply('❌ Tu n\'as pas le rôle requis pour gen dans ce canal.');
   }
 
   const count = await getStockCount(tier);
   if (count === 0) {
-    return interaction.reply({ content: `❌ No **${service}** accounts in stock for **${tier}** tier. Try again later.`, ephemeral: true });
+    return message.reply(`❌ Pas de comptes **${service}** en stock pour le tier **${tier}**. Réessaie plus tard.`);
   }
 
-  await interaction.deferReply({ ephemeral: true });
-
   // Create ticket channel
-  const guild = interaction.guild;
-  const category = interaction.channel.parent;
+  const guild = message.guild;
+  const category = message.channel.parent;
 
   const ticketChannel = await guild.channels.create({
     name: `ticket-${member.user.username}-${service.toLowerCase()}`,
@@ -64,13 +63,13 @@ export async function execute(interaction) {
   const embed = new EmbedBuilder()
     .setColor(0x5865F2)
     .setTitle(`🎟️ Gen Ticket — ${service}`)
-    .setDescription(`Hey ${member}, a staff member will deliver your **${service}** account shortly.\n\nPlease be patient and do not leave the server.`)
+    .setDescription(`Hey ${member}, un staff va te deliver ton compte **${service}** rapidement.\n\nSois patient et ne quitte pas le serveur.`)
     .addFields(
       { name: 'Service', value: service, inline: true },
       { name: 'Tier', value: tier.charAt(0).toUpperCase() + tier.slice(1), inline: true },
       { name: 'User', value: `${member}`, inline: true }
     )
-    .setFooter({ text: 'Raizen Gen • Do not share your credentials' })
+    .setFooter({ text: 'Raizen Gen • Ne partage pas tes identifiants' })
     .setTimestamp();
 
   const deliverBtn = new ButtonBuilder()
@@ -89,12 +88,12 @@ export async function execute(interaction) {
   const staffPing = `<@&${config.roles.staff}> <@&${config.roles.helper}>`;
   await ticketChannel.send({ content: staffPing, embeds: [embed], components: [row] });
 
-  await interaction.editReply({ content: `✅ Your ticket has been created: ${ticketChannel}` });
+  await message.reply(`✅ Ton ticket a été créé: ${ticketChannel}`);
 
-  await sendLog(interaction.client, {
+  await sendLog(message.client, {
     color: LogColors.ticket,
     title: '🎟️ Gen Ticket Opened',
-    description: `**${member.user.tag}** opened a gen ticket for **${service}**`,
+    description: `**${member.user.tag}** a ouvert un ticket de gen pour **${service}**`,
     fields: [
       { name: 'User', value: `${member}`, inline: true },
       { name: 'Service', value: service, inline: true },
