@@ -1,1 +1,11 @@
-{}
+{
+  "1500575333915558110": {
+    "channelId": "1500575333915558110",
+    "userId": "1112314692258512926",
+    "service": "free",
+    "tier": "free",
+    "staffId": null,
+    "vouchGiven": false,
+    "createdAt": 1777835439124
+  }
+}
