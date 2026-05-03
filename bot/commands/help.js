@@ -22,11 +22,13 @@ export async function execute(message, args) {
       { name: '!purge <amount>', value: 'Delete messages (mod)', inline: false },
       { name: '!announcement <message>', value: 'Send announcement (admin)', inline: false },
       { name: '!close [reason]', value: 'Close ticket (mod)', inline: false },
-      { name: '!addstock <tier>', value: 'Add stock (attach file) (staff)', inline: false },
-      { name: '!stock', value: 'Check stock counts (staff)', inline: false },
+      { name: '!addstock <tier> [service]', value: 'Add stock (attach file) (staff)', inline: false },
+      { name: '!stock', value: 'Check full stock (services) (staff)', inline: false },
+      { name: '!services <tier>', value: 'Show services in stock (staff)', inline: false },
       { name: '!rall <tier>', value: 'Clear stock (mega droper+)', inline: false },
       { name: '!backup', value: 'Create server backup (admin)', inline: false },
       { name: '!giveaway <create/end/reroll>', value: 'Manage giveaways (staff)', inline: false },
+      { name: '!send <service> <amount> [@user] [comment]', value: 'Send accounts to user (admin)', inline: false },
     )
     .setFooter({ text: 'Raizen Gen • Prefix: !' })
     .setTimestamp();

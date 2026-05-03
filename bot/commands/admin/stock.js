@@ -65,15 +65,34 @@ export const stockName = 'stock';
 export async function stockExec(message, args) {
   const counts = await getAllStockCounts();
 
+  // Get services for each tier
+  const tiers = ['free', 'premium', 'booster', 'extreme'];
+  const fields = [];
+
+  for (const tier of tiers) {
+    const accounts = await getStock(tier);
+    let serviceList = 'No accounts';
+    if (accounts.length > 0) {
+      const services = {};
+      for (const acc of accounts) {
+        const parts = acc.split(':');
+        let service = 'Unknown';
+        if (parts.length >= 3) service = parts[2];
+        services[service] = (services[service] || 0) + 1;
+      }
+      serviceList = Object.entries(services).map(([s, c]) => `**${s}**: ${c}`).join('\n');
+    }
+    fields.push({
+      name: `${tier.charAt(0).toUpperCase() + tier.slice(1)} (${counts[tier]})`,
+      value: serviceList,
+      inline: false
+    });
+  }
+
   const embed = new EmbedBuilder()
     .setColor(0x5865F2)
     .setTitle('📦 Current Stock')
-    .addFields(
-      { name: '🟢 Free', value: `**${counts.free}** accounts`, inline: true },
-      { name: '🔵 Premium', value: `**${counts.premium}** accounts`, inline: true },
-      { name: '🟣 Booster', value: `**${counts.booster}** accounts`, inline: true },
-      { name: '🔴 Extreme', value: `**${counts.extreme}** accounts`, inline: true },
-    )
+    .addFields(fields)
     .setFooter({ text: 'Raizen Gen • Stock' })
     .setTimestamp();
 
