@@ -28,6 +28,7 @@ import { addstockName, addstockExec } from './commands/admin/stock.js';
 import { stockName, stockExec } from './commands/admin/stock.js';
 import { rallName, rallExec } from './commands/admin/stock.js';
 import { backupName, backupExec } from './commands/admin/stock.js';
+import { name as servicesName, execute as servicesExec } from './commands/admin/services.js';
 import { name as giveawayName, execute as giveawayExec } from './commands/giveaway/giveaway.js';
 import { name as helpName, execute as helpExec } from './commands/help.js';
 
@@ -64,6 +65,7 @@ client.commands.set(addstockName, { execute: addstockExec });
 client.commands.set(stockName, { execute: stockExec });
 client.commands.set(rallName, { execute: rallExec });
 client.commands.set(backupName, { execute: backupExec });
+client.commands.set(servicesName, { execute: servicesExec });
 client.commands.set(giveawayName, { execute: giveawayExec });
 client.commands.set(helpName, { execute: helpExec });
 

@@ -9,8 +9,9 @@ export const addstockName = 'addstock';
 export async function addstockExec(message, args) {
   if (!isStaff(message.member)) return message.reply('❌ Staff only.');
   const tier = args[0];
+  const service = args[1] || 'Unknown';
   if (!tier || !['free', 'premium', 'booster', 'extreme'].includes(tier)) {
-    return message.reply('❌ Usage: `!addstock <tier>` (attach a .txt or .zip file)');
+    return message.reply('❌ Usage: `!addstock <tier> [service]` (attach a .txt or .zip file)');
   }
 
   const attachment = message.attachments.first();
@@ -43,14 +44,20 @@ export async function addstockExec(message, args) {
 
   if (!lines.length) return message.reply('❌ No valid accounts found in the file.');
 
-  const total = await addStock(tier, lines);
+  // Add service to each account (format: email:pass:service)
+  const linesWithService = lines.map(line => {
+    if (line.split(':').length >= 3) return line; // already has service
+    return `${line}:${service}`;
+  });
 
-  await message.reply(`✅ Added **${lines.length}** accounts to **${tier}** tier. Total: **${total}**`);
+  const total = await addStock(tier, linesWithService);
+
+  await message.reply(`✅ Added **${lines.length}** accounts to **${tier}** tier (service: ${service}). Total: **${total}**`);
 
   await sendLog(message.client, {
     color: LogColors.info,
     title: '📦 Stock Added',
-    description: `**${message.author.tag}** added **${lines.length}** accounts to **${tier}**`,
+    description: `**${message.author.tag}** added **${lines.length}** accounts to **${tier}** (${service})`,
   });
 }
 
