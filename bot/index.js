@@ -54,6 +54,12 @@ async function registerCommands() {
   const rest = new REST({ version: '10' }).setToken(config.token);
   const commandData = commands.map(c => (c.data || c).toJSON ? (c.data || c).toJSON() : null).filter(Boolean);
   try {
+    // Supprimer toutes les anciennes commandes de la guild
+    const existingCommands = await rest.get(Routes.applicationGuildCommands(config.clientId, config.guildId));
+    for (const cmd of existingCommands) {
+      await rest.delete(Routes.applicationGuildCommand(config.clientId, config.guildId, cmd.id));
+    }
+    // Enregistrer les nouvelles commandes
     await rest.put(Routes.applicationGuildCommands(config.clientId, config.guildId), { body: commandData });
     console.log('✅ Slash commands registered.');
   } catch (e) {
@@ -61,7 +67,7 @@ async function registerCommands() {
   }
 }
 
-client.once('ready', async () => {
+client.once('clientReady', async () => {
   console.log(`✅ Logged in as ${client.user.tag}`);
   await registerCommands();
   startCronJobs(client);
@@ -135,6 +141,6 @@ const bridge = http.createServer(async (req, res) => {
   }
 });
 
-bridge.listen(process.env.BOT_PORT || 3001, () => {
-  console.log(`🌐 Bot HTTP bridge running on port ${process.env.BOT_PORT || 3001}`);
+bridge.listen(process.env.PORT || 3000, () => {
+  console.log(`🌐 Bot HTTP bridge running on port ${process.env.PORT || 3000}`);
 });
