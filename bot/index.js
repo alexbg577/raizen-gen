@@ -28,7 +28,7 @@ import { addstockName, addstockExec } from './commands/admin/stock.js';
 import { stockName, stockExec } from './commands/admin/stock.js';
 import { rallName, rallExec } from './commands/admin/stock.js';
 import { backupName, backupExec } from './commands/admin/stock.js';
-import { servicesName, servicesExec } from './commands/admin/services.js';
+import { name as servicesName, execute as servicesExec } from './commands/admin/services.js';
 import { name as sendName, execute as sendExec } from './commands/admin/send.js';
 import { name as giveawayName, execute as giveawayExec } from './commands/giveaway/giveaway.js';
 import { name as helpName, execute as helpExec } from './commands/help.js';
