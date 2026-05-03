@@ -35,28 +35,13 @@ export function startCronJobs(client) {
     }
   });
 
-  // Check invite statuses every 5 minutes
+  // Check invite statuses every 5 minutes (only log, don't change roles to avoid messages)
   cron.schedule('*/5 * * * *', async () => {
     try {
       const guild = client.guilds.cache.get(config.guildId);
       if (!guild) return;
+      // Just fetch members, don't modify roles to avoid spam
       await guild.members.fetch();
-      const members = guild.members.cache.filter(m => !m.user.bot);
-
-      for (const [, member] of members) {
-        const presence = member.presence;
-        const hasInvite = presence?.activities?.some(a =>
-          a.state?.includes(config.inviteLink) || a.name?.includes(config.inviteLink)
-        );
-        const hasRole = member.roles.cache.has(config.roles.basicGen);
-
-        if (hasInvite && !hasRole) {
-          await member.roles.add(config.roles.basicGen).catch(() => {});
-        } else if (!hasInvite && hasRole && !member.roles.cache.has(config.roles.premiumGen) &&
-          !member.roles.cache.has(config.roles.boosterGen) && !member.roles.cache.has(config.roles.extremeGen)) {
-          await member.roles.remove(config.roles.basicGen).catch(() => {});
-        }
-      }
     } catch (e) {
       console.error('Invite check cron error:', e);
     }

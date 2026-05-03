@@ -1,12 +1,27 @@
 import { EmbedBuilder } from 'discord.js';
 import { config } from '../../shared/config.js';
 
+// Prevent duplicate logs
+const recentLogs = new Map(); // key: `${title}-${description}`, value: timestamp
+
 export async function sendLog(client, options) {
   try {
     const guild = client.guilds.cache.get(config.guildId);
     if (!guild) return;
     const channel = guild.channels.cache.get(config.channels.log);
     if (!channel) return;
+
+    // Check for duplicate (within 5 seconds)
+    const key = `${options.title}-${options.description}`;
+    const lastTime = recentLogs.get(key);
+    if (lastTime && Date.now() - lastTime < 5000) {
+      return; // Skip duplicate
+    }
+    recentLogs.set(key, Date.now());
+    // Clean old entries
+    for (const [k, v] of recentLogs) {
+      if (Date.now() - v > 10000) recentLogs.delete(k);
+    }
 
     const embed = new EmbedBuilder()
       .setColor(options.color || 0x5865F2)
