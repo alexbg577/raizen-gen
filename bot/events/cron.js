@@ -4,7 +4,7 @@ import { config } from '../../shared/config.js';
 import { getAllStockCounts } from '../utils/github.js';
 
 export function startCronJobs(client) {
-  // Post stock every 2 hours
+  // Post stock every 2 hours (full details with services)
   cron.schedule('0 */2 * * *', async () => {
     try {
       const guild = client.guilds.cache.get(config.guildId);
@@ -12,20 +12,36 @@ export function startCronJobs(client) {
       const channel = guild.channels.cache.get(config.channels.stockLog);
       if (!channel) return;
 
-      const counts = await getAllStockCounts();
-      const total = Object.values(counts).reduce((a, b) => a + b, 0);
+      const tiers = ['free', 'premium', 'booster', 'extreme'];
+      const fields = [];
+      let totalAccounts = 0;
+
+      for (const tier of tiers) {
+        const accounts = await getStock(tier);
+        totalAccounts += accounts.length;
+        let serviceList = 'No accounts';
+        if (accounts.length > 0) {
+          const services = {};
+          for (const acc of accounts) {
+            const parts = acc.split(':');
+            let service = 'Unknown';
+            if (parts.length >= 3) service = parts[2];
+            services[service] = (services[service] || 0) + 1;
+          }
+          serviceList = Object.entries(services).map(([s, c]) => `**${s}**: ${c}`).join('\n');
+        }
+        fields.push({
+          name: `${tier.charAt(0).toUpperCase() + tier.slice(1)} (${accounts.length})`,
+          value: serviceList,
+          inline: false
+        });
+      }
 
       const embed = new EmbedBuilder()
         .setColor(0x5865F2)
         .setTitle('📦 Stock Update')
-        .setDescription('Here is the current stock status:')
-        .addFields(
-          { name: '🟢 Free', value: `**${counts.free}** accounts`, inline: true },
-          { name: '🔵 Premium', value: `**${counts.premium}** accounts`, inline: true },
-          { name: '🟣 Booster', value: `**${counts.booster}** accounts`, inline: true },
-          { name: '🔴 Extreme', value: `**${counts.extreme}** accounts`, inline: true },
-          { name: '📊 Total', value: `**${total}** accounts`, inline: false },
-        )
+        .setDescription(`Total: **${totalAccounts}** accounts`)
+        .addFields(fields)
         .setFooter({ text: 'Raizen Gen • Auto Stock Update' })
         .setTimestamp();
 

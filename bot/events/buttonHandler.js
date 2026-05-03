@@ -67,7 +67,7 @@ export async function handleButton(interaction) {
       .setTimestamp();
     if (user) await user.send({ embeds: [accountEmbed] }).catch(() => {});
     const ticketChannel = interaction.guild.channels.cache.get(ticketChannelId);
-    if (ticketChannel) await ticketChannel.send({ content: `<@${ticket.userId}>`, embeds: [accountEmbed] });
+    if (ticketChannel) await ticketChannel.send({ content: `<@${ticket.userId}> ✅ Account delivered to your DMs!` });
     const vouchBtn = new ButtonBuilder()
       .setCustomId(`vouch_staff_${interaction.user.id}`)
       .setLabel('⭐ Vouch Staff')
