@@ -29,6 +29,7 @@ import { stockName, stockExec } from './commands/admin/stock.js';
 import { rallName, rallExec } from './commands/admin/stock.js';
 import { backupName, backupExec } from './commands/admin/stock.js';
 import { name as giveawayName, execute as giveawayExec } from './commands/giveaway/giveaway.js';
+import { name as helpName, execute as helpExec } from './commands/help.js';
 
 const client = new Client({
   intents: [
@@ -64,6 +65,7 @@ client.commands.set(stockName, { execute: stockExec });
 client.commands.set(rallName, { execute: rallExec });
 client.commands.set(backupName, { execute: backupExec });
 client.commands.set(giveawayName, { execute: giveawayExec });
+client.commands.set(helpName, { execute: helpExec });
 
 const PREFIX = '!';
 
@@ -106,7 +108,7 @@ client.on('messageCreate', async (message) => {
     await cmd.execute(message, args);
   } catch (e) {
     console.error(`Command error [${commandName}]:`, e);
-    message.reply('❌ Une erreur est survenue.').catch(() => {});
+    message.reply('❌ An error occurred.').catch(() => {});
   }
 });
 

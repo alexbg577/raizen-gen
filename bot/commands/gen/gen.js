@@ -20,16 +20,16 @@ export async function execute(message, args) {
   }
 
   if (!tier) {
-    return message.reply('❌ Utilise cette commande dans un canal de gen.');
+    return message.reply('❌ Use this command in a gen channel.');
   }
 
   if (!canGenInChannel(member, channelId)) {
-    return message.reply('❌ Tu n\'as pas le rôle requis pour gen dans ce canal.');
+    return message.reply('❌ You don\'t have the required role to gen in this channel.');
   }
 
   const count = await getStockCount(tier);
   if (count === 0) {
-    return message.reply(`❌ Pas de comptes **${service}** en stock pour le tier **${tier}**. Réessaie plus tard.`);
+    return message.reply(`❌ No **${service}** accounts in stock for **${tier}** tier. Try again later.`);
   }
 
   // Create ticket channel
@@ -63,13 +63,13 @@ export async function execute(message, args) {
   const embed = new EmbedBuilder()
     .setColor(0x5865F2)
     .setTitle(`🎟️ Gen Ticket — ${service}`)
-    .setDescription(`Hey ${member}, un staff va te deliver ton compte **${service}** rapidement.\n\nSois patient et ne quitte pas le serveur.`)
+    .setDescription(`Hey ${member}, a staff member will deliver your **${service}** account shortly.\n\nPlease be patient and do not leave the server.`)
     .addFields(
       { name: 'Service', value: service, inline: true },
       { name: 'Tier', value: tier.charAt(0).toUpperCase() + tier.slice(1), inline: true },
       { name: 'User', value: `${member}`, inline: true }
     )
-    .setFooter({ text: 'Raizen Gen • Ne partage pas tes identifiants' })
+    .setFooter({ text: 'Raizen Gen • Do not share your credentials' })
     .setTimestamp();
 
   const deliverBtn = new ButtonBuilder()
@@ -88,12 +88,12 @@ export async function execute(message, args) {
   const staffPing = `<@&${config.roles.staff}> <@&${config.roles.helper}>`;
   await ticketChannel.send({ content: staffPing, embeds: [embed], components: [row] });
 
-  await message.reply(`✅ Ton ticket a été créé: ${ticketChannel}`);
+  await message.reply(`✅ Your ticket has been created: ${ticketChannel}`);
 
   await sendLog(message.client, {
     color: LogColors.ticket,
     title: '🎟️ Gen Ticket Opened',
-    description: `**${member.user.tag}** a ouvert un ticket de gen pour **${service}**`,
+    description: `**${member.user.tag}** opened a gen ticket for **${service}**`,
     fields: [
       { name: 'User', value: `${member}`, inline: true },
       { name: 'Service', value: service, inline: true },
