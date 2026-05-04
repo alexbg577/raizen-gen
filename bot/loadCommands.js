@@ -1,9 +1,20 @@
 import { readdirSync } from 'fs';
-import { resolve, join, extname } from 'path';
+import { resolve, join } from 'path';
+import { fileURLToPath } from 'url';
 
-export async function loadCommands(commands, dir = './commands') {
-  const fullPath = resolve(dir);
-  const entries = readdirSync(fullPath, { withFileTypes: true });
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
+
+export async function loadCommands(commands, dir = null) {
+  const baseDir = dir || join(__dirname, 'commands');
+  const fullPath = resolve(baseDir);
+  
+  let entries;
+  try {
+    entries = readdirSync(fullPath, { withFileTypes: true });
+  } catch (e) {
+    console.error(`Cannot read directory ${fullPath}:`, e.message);
+    return;
+  }
 
   for (const entry of entries) {
     const entryPath = join(fullPath, entry.name);
