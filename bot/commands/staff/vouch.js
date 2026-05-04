@@ -16,7 +16,7 @@ export async function execute(message, args) {
   const giver = message.author;
   const admin = isAdmin(message.member);
 
-  if (target.id === giver.id) {
+  if (target.id === giver.id && !admin) {
     return message.reply('❌ You cannot vouch yourself.');
   }
 

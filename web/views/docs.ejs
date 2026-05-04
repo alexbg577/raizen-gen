@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation - Raizen Gen</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <%- include('partials/nav', { path: '/docs' }) %>
+    
+    <div class="container">
+        <header class="docs-hero">
+            <h1>📖 Raizen Gen Documentation</h1>
+            <p>Everything you need to know about using Raizen Gen</p>
+        </header>
+
+        <div class="docs-grid">
+            <section class="docs-section">
+                <h2><i class="fas fa-gamepad"></i> Getting Started</h2>
+                <div class="docs-card">
+                    <h3>1. Get Basic Gen Role</h3>
+                    <p>Copy invite link: <code>https://discord.gg/PPdYTSFuby</code></p>
+                    <p>Go to <strong>User Settings → Activity → Custom Status</strong></p>
+                    <p>Paste the link and wait 5 minutes</p>
+                </div>
+                <div class="docs-card">
+                    <h3>2. Generate Account</h3>
+                    <p>Go to <strong>Gen Channels</strong> category</p>
+                    <p>Use <code>!gen &lt;service&gt;</code> (ex: <code>!gen Netflix</code>)</p>
+                </div>
+            </section>
+
+            <section class="docs-section">
+                <h2><i class="fas fa-list"></i> Commands List</h2>
+                <div class="docs-card">
+                    <h3>🎮 Gen Commands</h3>
+                    <ul>
+                        <li><code>!gen &lt;service&gt;</code> - Generate account</li>
+                        <li><code>!profile [@user]</code> - View profile</li>
+                    </ul>
+                </div>
+                <div class="docs-card">
+                    <h3>⭐ Vouch Commands</h3>
+                    <ul>
+                        <li><code>!vouch @user [amount]</code> - Give vouch (staff)</li>
+                        <li><code>!rvouch @user [amount]</code> - Remove vouch (admin)</li>
+                        <li><code>!leaderboard</code> - View rankings</li>
+                    </ul>
+                </div>
+                <div class="docs-card">
+                    <h3>🛡️ Moderation</h3>
+                    <ul>
+                        <li><code>!ban @user [reason]</code> - Ban user</li>
+                        <li><code>!kick @user [reason]</code> - Kick user</li>
+                        <li><code>!mute @user &lt;min&gt; [reason]</code> - Mute</li>
+                        <li><code>!unmute @user</code> - Unmute</li>
+                        <li><code>!warn @user &lt;reason&gt;</code> - Warn</li>
+                        <li><code>!purge &lt;amount&gt;</code> - Delete messages</li>
+                        <li><code>!close [reason]</code> - Close ticket</li>
+                    </ul>
+                </div>
+                <div class="docs-card">
+                    <h3>📦 Stock</h3>
+                    <ul>
+                        <li><code>!addstock &lt;tier&gt; [service]</code> - Add stock (Staff)</li>
+                        <li><code>!stock</code> - View full stock with services</li>
+                        <li><code>!services &lt;tier&gt;</code> - List services in tier</li>
+                        <li><code>!rall &lt;tier&gt;</code> - Clear stock (Mega Droper+)</li>
+                        <li><code>!send &lt;service&gt; &lt;amt&gt; [@user] [comment]</code> - Send accounts (Admin)</li>
+                    </ul>
+                </div>
+                <div class="docs-card">
+                    <h3>🎉 Giveaways</h3>
+                    <ul>
+                        <li><code>!giveaway create &lt;prize&gt; &lt;duration&gt; [winners]</code> - Create (Admin)</li>
+                        <li><code>!giveaway end &lt;msgId&gt;</code> - End giveaway</li>
+                        <li><code>!giveaway reroll &lt;msgId&gt;</code> - Reroll</li>
+                        <li><code>!giveaway list</code> - List active giveaways</li>
+                    </ul>
+                </div>
+                <div class="docs-card">
+                    <h3>🔧 Admin</h3>
+                    <ul>
+                        <li><code>!verify @user</code> - Verify user (Staff)</li>
+                        <li><code>!announcement &lt;msg&gt;</code> - Send announcement</li>
+                        <li><code>!backup</code> - Create server backup</li>
+                        <li><code>!web</code> - Get website link</li>
+                        <li><code>!help</code> - Show this help</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="docs-section">
+                <h2><i class="fas fa-trophy"></i> Vouch System</h2>
+                <div class="docs-card">
+                    <p>Give vouches to helpful members. Thresholds:</p>
+                    <ul>
+                        <li>30 vouches → Trained Mod</li>
+                        <li>60 vouches → Mega Droper</li>
+                        <li>100 vouches → Admin</li>
+                    </ul>
+                    <p>Vouch cooldown: 1 hour between vouches to same person</p>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 Raizen Gen • <a href="/">Home</a> • <a href="/dashboard">Dashboard</a></p>
+    </footer>
+</body>
+</html>

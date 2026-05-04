@@ -108,6 +108,11 @@ app.get('/profile/:id', isAuth, async (req, res) => {
   res.render('profile', { user: req.user, vouchCount: vouchData.count, rank, tier, path: '/profile' });
 });
 
+// Docs page
+app.get('/docs', (req, res) => {
+  res.render('docs', { user: req.user, path: '/docs' });
+});
+
 app.get('/leaderboard', async (req, res) => {
   const vouches = await getVouches();
   const sorted = Object.entries(vouches)
