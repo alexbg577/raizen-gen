@@ -5,7 +5,9 @@
     "prize": "test",
     "winners": 1,
     "endsAt": 1777914287821,
-    "entries": [],
+    "entries": [
+      "1112314692258512926"
+    ],
     "ended": false,
     "hostId": "1112314692258512926"
   }
