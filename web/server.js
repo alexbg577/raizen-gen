@@ -98,6 +98,16 @@ app.post('/gen', isAuth, async (req, res) => {
   });
 });
 
+// Profile page
+app.get('/profile/:id', isAuth, async (req, res) => {
+  const userId = req.params.id;
+  const vouches = await getVouches();
+  const vouchData = vouches[userId] || { count: 0 };
+  const rank = vouchData.count >= 100 ? 'Admin' : vouchData.count >= 60 ? 'Mega Droper' : vouchData.count >= 30 ? 'Trained Mod' : 'Member';
+  const tier = 'Basic Gen'; // Simplified for web
+  res.render('profile', { user: req.user, vouchCount: vouchData.count, rank, tier, path: '/profile' });
+});
+
 app.get('/leaderboard', async (req, res) => {
   const vouches = await getVouches();
   const sorted = Object.entries(vouches)
@@ -105,7 +115,7 @@ app.get('/leaderboard', async (req, res) => {
     .filter(e => e.count > 0)
     .sort((a, b) => b.count - a.count)
     .slice(0, 20);
-  res.render('leaderboard', { user: req.user, leaderboard: sorted });
+  res.render('leaderboard', { user: req.user, leaderboard: sorted, path: '/leaderboard' });
 });
 
 app.get('/giveaways', async (req, res) => {

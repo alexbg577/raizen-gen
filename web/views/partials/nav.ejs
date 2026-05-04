@@ -1,20 +1,22 @@
-<nav class="navbar">
-  <a href="/" class="nav-logo">RAIZEN<span class="accent">GEN</span></a>
-  <div class="nav-links">
-    <a href="/">Home</a>
-    <a href="/gen">Generate</a>
-    <a href="/leaderboard">Leaderboard</a>
-    <a href="/giveaways">Giveaways</a>
-    <% if (user) { %>
-      <a href="/dashboard">Dashboard</a>
-      <div class="nav-user">
-        <img src="https://cdn.discordapp.com/avatars/<%= user.id %>/<%= user.avatar %>.png" alt="avatar" onerror="this.src='/img/default.png'">
-        <span><%= user.username %></span>
-        <a href="/logout" class="btn btn-sm">Logout</a>
-      </div>
-    <% } else { %>
-      <a href="/login" class="btn btn-primary btn-sm">Login</a>
-    <% } %>
-  </div>
-  <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')">☰</button>
+<nav>
+    <div class="nav-brand">
+        <img src="https://i.imgur.com/8xZq3eE.png" alt="Logo" class="logo">
+        <span>Raizen Gen</span>
+    </div>
+    <div class="nav-links">
+        <a href="/" class="<%= path === '/' ? 'active' : '' %>">Home</a>
+        <a href="/dashboard" class="<%= path === '/dashboard' ? 'active' : '' %>">Dashboard</a>
+        <a href="/gen" class="<%= path === '/gen' ? 'active' : '' %>">Generate</a>
+        <a href="/leaderboard" class="<%= path === '/leaderboard' ? 'active' : '' %>">Leaderboard</a>
+        <a href="/giveaways" class="<%= path === '/giveaways' ? 'active' : '' %>">Giveaways</a>
+        <% if (user) { %>
+            <a href="/profile/<%= user.id %>" class="profile-link">
+                <img src="https://cdn.discordapp.com/avatars/<%= user.id %>/<%= user.avatar %>.png" alt="Avatar" class="nav-avatar">
+                <span><%= user.username %></span>
+            </a>
+            <a href="/logout" class="logout-btn">Logout</a>
+        <% } else { %>
+            <a href="/login" class="login-btn">Login</a>
+        <% } %>
+    </div>
 </nav>
