@@ -3,22 +3,59 @@ import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'disc
 export const name = 'help';
 
 export async function execute(message, args) {
-  const helpEmbed = new EmbedBuilder()
+  const { client } = message;
+  const commands = client.commands;
+
+  // If a specific command is requested
+  if (args.length > 0) {
+    const cmdName = args[0].toLowerCase();
+    const cmd = commands.get(cmdName);
+    if (!cmd) return message.reply('❌ Command not found.');
+    
+    const embed = new EmbedBuilder()
+      .setColor(0x5865F2)
+      .setTitle(`📖 Help: !${cmdName}`)
+      .setDescription('Command details and usage.')
+      .setFooter({ text: 'Raizen Gen • Use !help for all commands' });
+    
+    await message.reply({ embeds: [embed] });
+    return;
+  }
+
+  // Group commands by category
+  const categories = {
+    '🎮 Gen': ['gen', 'profile'],
+    '⭐ Vouch': ['vouch', 'rvouch', 'leaderboard'],
+    '🛡️ Moderation': ['ban', 'kick', 'mute', 'unmute', 'warn', 'purge', 'close', 'clearreactions', 'lock', 'unlock', 'slowmode', 'addrole', 'removerole', 'createtext', 'createvoice', 'deletechannel', 'createrole', 'deleterole', 'nick', 'purgebot', 'purgeuser', 'movemsg', 'stealmsg', 'pin', 'unpin', 'pins'],
+    '📦 Stock': ['addstock', 'stock', 'services', 'rall', 'send'],
+    '🎉 Giveaway': ['giveaway'],
+    '🔧 Admin': ['verify', 'announce', 'backup', 'announcement', 'notifiy', 'servers'],
+    '🌐 Web': ['web'],
+    '📊 Info': ['serverinfo', 'userinfo', 'botinfo', 'avatar', 'channelinfo', 'roleinfo', 'firstmessage', 'servericon', 'serverbanner', 'invite', 'perms', 'rolemembers', 'boostinfo', 'poll', 'pollquick', 'snipe'],
+    '🎲 Fun': ['8ball', 'roll', 'flip', 'rps', 'rpsls', 'hug', 'kiss', 'slap', 'pat', 'cry', 'laugh', 'dance', 'pizza', 'coin', 'rate', 'compliment', 'roast', 'truth', 'dare', 'meme', 'joke', 'fact', 'quote', 'fortune'],
+    '🔧 Tools': ['calc', 'random', 'ping', 'uptime', 'remind', 'password', 'token', 'encode', 'decode', 'binary', 'hex', 'reverse', 'leet', 'clap', 'mock', 'shuffle', 'vaporwave', 'translate', 'weather', 'qrcode', 'shorturl', 'color'],
+    '🎮 Games': ['play', 'watch', 'listen', 'stream', 'resetpresence', 'mine', 'fish', 'hunt', 'gamble', 'daily', 'weekly', 'monthly', 'inventory', 'shop', 'leaderboard', 'blackjack', 'poker', 'roulette', 'slot', 'lottery', 'wheel', 'scratch', 'hack', 'ship', 'ticactoe', 'trivia', 'challenge'],
+    '💬 Misc': ['say', 'esay', 'dm', 'afk', 'cowsay', 'rhyme', 'define', 'scramble', 'credit'],
+  };
+
+  const embed = new EmbedBuilder()
     .setColor(0x5865F2)
     .setTitle('📖 Raizen Gen Help')
-    .setDescription('**Welcome to Raizen Gen!**\nHere are all available commands:')
-    .addFields(
-      { name: '🎮 Gen Commands', value: '`!gen <service>` - Generate an account\n`!profile [@user]` - Show profile & vouches', inline: false },
-      { name: '⭐ Vouch System', value: '`!vouch @user [amount]` - Give vouch (staff)\n`!rvouch @user [amount]` - Remove vouch (admin)\n`!leaderboard` - Show vouch rankings', inline: false },
-      { name: '🛡️ Moderation', value: '`!ban @user [reason]` - Ban user\n`!kick @user [reason]` - Kick user\n`!mute @user <min> [reason]` - Mute user\n`!unmute @user` - Unmute\n`!warn @user <reason>` - Warn user\n`!purge <amount>` - Delete messages\n`!close [reason]` - Close ticket', inline: false },
-      { name: '📦 Stock Management', value: '`!addstock <tier> [service]` - Add stock (attach file)\n`!stock` - View full stock with services\n`!services <tier>` - List services in tier\n`!rall <tier>` - Clear stock (mega droper+)\n`!send <service> <amt> [@user] [comment]` - Send accounts (admin)', inline: false },
-      { name: '🎉 Giveaways', value: '`!giveaway create/end/reroll` - Manage giveaways (staff)', inline: false },
-      { name: '🔧 Admin', value: '`!verify @user` - Verify user (staff)\n`!announcement <msg>` - Send announcement\n`!backup` - Create server backup', inline: false },
-      { name: '🌐 Web', value: '`!web` - Get website link', inline: false }
-    )
-    .setThumbnail('https://i.imgur.com/8xZq3eE.png') // Optional: add Raizen Gen logo
-    .setFooter({ text: 'Raizen Gen • Prefix: ! • Use ?help <command> for details', iconURL: 'https://i.imgur.com/8xZq3eE.png' })
+    .setDescription(`**${commands.size} commands available**\nUse \`!help <command>\` for details`)
+    .setThumbnail('https://i.imgur.com/8xzQ3eE.png')
+    .setFooter({ text: 'Raizen Gen • Prefix: !', iconURL: 'https://i.imgur.com/8xzQ3eE.png' })
     .setTimestamp();
+
+  for (const [catName, cmdNames] of Object.entries(categories)) {
+    const available = cmdNames.filter(c => commands.has(c));
+    if (available.length > 0) {
+      embed.addFields({
+        name: catName,
+        value: available.map(c => `\`!${c}\``).join(', '),
+        inline: false
+      });
+    }
+  }
 
   const row = new ActionRowBuilder()
     .addComponents(
@@ -32,5 +69,5 @@ export async function execute(message, args) {
         .setURL('https://raizen-gen-web.onrender.com/docs')
     );
 
-  await message.reply({ embeds: [helpEmbed], components: [row] });
+  await message.reply({ embeds: [embed], components: [row] });
 }
