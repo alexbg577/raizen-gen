@@ -1,44 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Giveaways — Raizen Gen</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raizen Gen - Giveaways</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-<%- include('partials/nav') %>
-<main class="page-main">
-  <div class="page-header">
-    <h1>🎉 <span class="accent">Giveaways</span></h1>
-    <p>Active and past giveaways</p>
-  </div>
-  <div class="giveaways-grid">
-    <% if (!giveaways.length) { %>
-      <div class="empty-state">No giveaways at the moment. Stay tuned!</div>
-    <% } %>
-    <% giveaways.forEach(g => { %>
-      <div class="giveaway-card <%= g.ended ? 'ended' : 'active' %>">
-        <div class="gw-status"><%= g.ended ? '🔴 Ended' : '🟢 Active' %></div>
-        <h3 class="gw-prize"><%= g.prize %></h3>
-        <div class="gw-meta">
-          <span>👥 <%= g.entries.length %> entries</span>
-          <span>🏆 <%= g.winners %> winner(s)</span>
+    <nav>
+        <div class="nav-brand">
+            <img src="https://i.imgur.com/8xZq3eE.png" alt="Logo" class="logo">
+            <span>Raizen Gen</span>
         </div>
-        <div class="gw-time">
-          <% if (g.ended) { %>
-            Ended
-          <% } else { %>
-            Ends <span class="countdown" data-ends="<%= g.endsAt %>"></span>
-          <% } %>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/gen">Generate</a>
+            <a href="/leaderboard">Leaderboard</a>
+            <a href="/giveaways" class="active">Giveaways</a>
+            <% if (user) { %>
+                <a href="/logout" class="logout-btn">Logout</a>
+            <% } else { %>
+                <a href="/login" class="login-btn">Login</a>
+            <% } %>
         </div>
-      </div>
-    <% }) %>
-  </div>
-</main>
-<%- include('partials/footer') %>
-<script src="/js/main.js"></script>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>🎉 Active Giveaways</h1>
+            <p>Participate and win amazing prizes!</p>
+        </div>
+        
+        <% if (giveaways.length === 0) { %>
+            <div class="empty-state">
+                <i class="fas fa-gift fa-3x"></i>
+                <p>No active giveaways at the moment.</p>
+                <p>Check back later or ask staff to create one!</p>
+            </div>
+        <% } %>
+        
+        <div class="giveaway-grid">
+        <% giveaways.forEach(g => { %>
+            <div class="giveaway-card <%= g.ended ? 'ended' : '' %>">
+                <div class="giveaway-header">
+                    <i class="fas fa-gift"></i>
+                    <h3><%= g.prize %></h3>
+                </div>
+                <div class="giveaway-info">
+                    <p><i class="fas fa-user"></i> <strong>Host:</strong> <%- g.hostId %></p>
+                    <p><i class="fas fa-users"></i> <strong>Entries:</strong> <%= g.entries.length %></p>
+                    <p><i class="fas fa-clock"></i> <strong>Ends:</strong> <t:<%= Math.floor(g.endsAt / 1000) %>:R></p>
+                </div>
+                <% if (!g.ended) { %>
+                    <button class="btn-enter" onclick="enterGiveaway('<%= g.messageId %>')">
+                        <i class="fas fa-ticket-alt"></i> Enter Giveaway
+                    </button>
+                <% } else { %>
+                    <div class="ended-badge">
+                        <i class="fas fa-flag-checkered"></i> Ended
+                    </div>
+                <% } %>
+            </div>
+        <% }); %>
+        </div>
+    </div>
+
+    <script>
+        function enterGiveaway(msgId) {
+            fetch(`/giveaways/enter/${msgId}`, { method: 'POST' })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('🎉 Successfully entered the giveaway!');
+                        location.reload();
+                    } else {
+                        alert('❌ ' + data.message);
+                    }
+                });
+        }
+    </script>
 </body>
 </html>

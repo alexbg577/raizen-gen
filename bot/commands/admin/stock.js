@@ -91,10 +91,13 @@ export async function stockExec(message, args) {
 
   const embed = new EmbedBuilder()
     .setColor(0x5865F2)
-    .setTitle('📦 Current Stock')
+    .setTitle('📦 Raizen Gen Stock Inventory')
+    .setDescription(`📊 **Total Accounts:** ${Object.values(counts).reduce((a, b) => a + b, 0)}\n\nHere are all available services by tier:`)
     .addFields(fields)
-    .setFooter({ text: 'Raizen Gen • Stock' })
-    .setTimestamp();
+    .setThumbnail('https://i.imgur.com/8xZq3eE.png') // Raizen Gen logo
+    .setFooter({ text: 'Raizen Gen • Stock System', iconURL: 'https://i.imgur.com/8xZq3eE.png' })
+    .setTimestamp()
+    .setImage('https://i.imgur.com/8xZq3eE.png'); // Optional banner
 
   await message.reply({ embeds: [embed] });
 }

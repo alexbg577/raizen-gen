@@ -55,6 +55,7 @@ const guild = { name: 'Raizen Gen', memberCount: '—', online: '—' };
 // ── ROUTES ──
 app.get('/', async (req, res) => {
   const counts = await getAllStockCounts();
+  const guild = { name: 'Raizen Gen', memberCount: '—', online: '—' };
   res.render('index', { user: req.user, counts, guild });
 });
 
@@ -111,6 +112,31 @@ app.get('/giveaways', async (req, res) => {
   const giveaways = await getGiveaways();
   const list = Object.values(giveaways).sort((a, b) => b.endsAt - a.endsAt);
   res.render('giveaways', { user: req.user, giveaways: list });
+});
+
+// Enter giveaway from website
+app.post('/giveaways/enter/:msgId', isAuth, async (req, res) => {
+  const msgId = req.params.msgId;
+  const giveaways = await getGiveaways();
+  const g = giveaways[msgId];
+  
+  if (!g || g.ended) {
+    return res.json({ success: false, message: 'Giveaway ended' });
+  }
+  
+  if (g.entries.includes(req.user.id)) {
+    return res.json({ success: false, message: 'Already entered' });
+  }
+  
+  g.entries.push(req.user.id);
+  await saveGiveaway(g);
+  
+  // Notify bot to update embed (send webhook or use log channel)
+  const notifyMsg = `🎉 **${req.user.username}** entered giveaway: **${g.prize}**`;
+  // Here you could send to bot's log channel via webhook
+  console.log(notifyMsg);
+  
+  res.json({ success: true, message: 'Entered giveaway!' });
 });
 
 // API endpoints
