@@ -1,4 +1,4 @@
-import { EmbedBuilder } from 'discord.js';
+import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 
 export const name = 'help';
 
@@ -6,32 +6,31 @@ export async function execute(message, args) {
   const helpEmbed = new EmbedBuilder()
     .setColor(0x5865F2)
     .setTitle('📖 Raizen Gen Help')
-    .setDescription('Here are all available commands:')
+    .setDescription('**Welcome to Raizen Gen!**\nHere are all available commands:')
     .addFields(
-      { name: '!gen <service>', value: 'Generate an account (use in gen channels)', inline: false },
-      { name: '!profile [@user]', value: 'Show user profile and vouches', inline: false },
-      { name: '!vouch @user [amount]', value: 'Give vouch to a user (staff)', inline: false },
-      { name: '!rvouch @user [amount]', value: 'Remove vouch from a user (admin)', inline: false },
-      { name: '!leaderboard', value: 'Show vouch leaderboard', inline: false },
-      { name: '!verify @user', value: 'Verify a user (staff)', inline: false },
-      { name: '!ban @user [reason]', value: 'Ban a user (mod)', inline: false },
-      { name: '!kick @user [reason]', value: 'Kick a user (mod)', inline: false },
-      { name: '!mute @user <duration> [reason]', value: 'Mute a user (mod)', inline: false },
-      { name: '!unmute @user', value: 'Unmute a user (mod)', inline: false },
-      { name: '!warn @user <reason>', value: 'Warn a user (mod)', inline: false },
-      { name: '!purge <amount>', value: 'Delete messages (mod)', inline: false },
-      { name: '!announcement <message>', value: 'Send announcement (admin)', inline: false },
-      { name: '!close [reason]', value: 'Close ticket (mod)', inline: false },
-      { name: '!addstock <tier> [service]', value: 'Add stock (attach file) (staff)', inline: false },
-      { name: '!stock', value: 'Check full stock (services) (staff)', inline: false },
-      { name: '!services <tier>', value: 'Show services in stock (staff)', inline: false },
-      { name: '!rall <tier>', value: 'Clear stock (mega droper+)', inline: false },
-      { name: '!backup', value: 'Create server backup (admin)', inline: false },
-      { name: '!giveaway <create/end/reroll>', value: 'Manage giveaways (staff)', inline: false },
-      { name: '!send <service> <amount> [@user] [comment]', value: 'Send accounts to user (admin)', inline: false },
+      { name: '🎮 Gen Commands', value: '`!gen <service>` - Generate an account\n`!profile [@user]` - Show profile & vouches', inline: false },
+      { name: '⭐ Vouch System', value: '`!vouch @user [amount]` - Give vouch (staff)\n`!rvouch @user [amount]` - Remove vouch (admin)\n`!leaderboard` - Show vouch rankings', inline: false },
+      { name: '🛡️ Moderation', value: '`!ban @user [reason]` - Ban user\n`!kick @user [reason]` - Kick user\n`!mute @user <min> [reason]` - Mute user\n`!unmute @user` - Unmute\n`!warn @user <reason>` - Warn user\n`!purge <amount>` - Delete messages\n`!close [reason]` - Close ticket', inline: false },
+      { name: '📦 Stock Management', value: '`!addstock <tier> [service]` - Add stock (attach file)\n`!stock` - View full stock with services\n`!services <tier>` - List services in tier\n`!rall <tier>` - Clear stock (mega droper+)\n`!send <service> <amt> [@user] [comment]` - Send accounts (admin)', inline: false },
+      { name: '🎉 Giveaways', value: '`!giveaway create/end/reroll` - Manage giveaways (staff)', inline: false },
+      { name: '🔧 Admin', value: '`!verify @user` - Verify user (staff)\n`!announcement <msg>` - Send announcement\n`!backup` - Create server backup', inline: false },
+      { name: '🌐 Web', value: '`!web` - Get website link', inline: false }
     )
-    .setFooter({ text: 'Raizen Gen • Prefix: !' })
+    .setThumbnail('https://i.imgur.com/8xZq3eE.png') // Optional: add Raizen Gen logo
+    .setFooter({ text: 'Raizen Gen • Prefix: ! • Use ?help <command> for details', iconURL: 'https://i.imgur.com/8xZq3eE.png' })
     .setTimestamp();
 
-  await message.reply({ embeds: [helpEmbed] });
+  const row = new ActionRowBuilder()
+    .addComponents(
+      new ButtonBuilder()
+        .setLabel('🌐 Website')
+        .setStyle(ButtonStyle.Link)
+        .setURL('https://raizen-gen-web.onrender.com'),
+      new ButtonBuilder()
+        .setLabel('📖 Documentation')
+        .setStyle(ButtonStyle.Link)
+        .setURL('https://raizen-gen-web.onrender.com/docs')
+    );
+
+  await message.reply({ embeds: [helpEmbed], components: [row] });
 }

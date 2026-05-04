@@ -19,7 +19,29 @@ export async function execute(message, args) {
 
   const tier = getTierFromChannel(channelId);
   if (!tier) {
-    return message.reply('❌ Use this command in a gen channel.');
+    return message.reply({
+      embeds: [
+        new EmbedBuilder()
+          .setColor(0xFF0000)
+          .setTitle('❌ Wrong Channel')
+          .setDescription('Please use this command in a **Gen Channel**!\n\nGo to: **Gen Channels** category → **free-gen** or other gen channels.')
+          .setFooter({ text: 'Raizen Gen • Gen System' })
+          .setTimestamp()
+      ]
+    });
+  }
+
+  if (!canGenInChannel(member, channelId)) {
+    return message.reply({
+      embeds: [
+        new EmbedBuilder()
+          .setColor(0xFFA500)
+          .setTitle('🔒 Missing Role: Basic Gen')
+          .setDescription('You need the **Basic Gen** role to generate accounts!\n\n**Step 1:** Copy this invite link:\n`https://discord.gg/PPdYTSFuby`\n**Step 2:** Go to **User Settings** → **Activity** → **Custom Status**\n**Step 3:** Paste the link & wait 5 minutes\n**Step 4:** Come back & use `!gen <service>`')
+          .setFooter({ text: 'Raizen Gen • Get Basic Gen Role' })
+          .setTimestamp()
+      ]
+    });
   }
 
   if (!canGenInChannel(member, channelId)) {
