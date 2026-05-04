@@ -8,31 +8,7 @@ import { handleGuildMemberAdd, handleGuildMemberRemove, handlePresenceUpdate } f
 import { startCronJobs } from './events/cron.js';
 import { sendLog, LogColors } from './utils/logger.js';
 import { restoreGiveaways } from './commands/giveaway/giveaway.js';
-
-// Commands
-import { name as genName, execute as genExec } from './commands/gen/gen.js';
-import { name as profileName, execute as profileExec } from './commands/gen/profile.js';
-import { name as verifyName, execute as verifyExec } from './commands/staff/verify.js';
-import { name as vouchName, execute as vouchExec } from './commands/staff/vouch.js';
-import { name as rvouchName, execute as rvouchExec } from './commands/staff/vouches.js';
-import { leaderboardName, leaderboardExec } from './commands/staff/vouches.js';
-import { banName, banExec } from './commands/mod/moderation.js';
-import { kickName, kickExec } from './commands/mod/moderation.js';
-import { muteName, muteExec } from './commands/mod/moderation.js';
-import { unmuteName, unmuteExec } from './commands/mod/moderation.js';
-import { warnName, warnExec } from './commands/mod/moderation.js';
-import { purgeName, purgeExec } from './commands/mod/moderation.js';
-import { announcementName, announcementExec } from './commands/mod/moderation.js';
-import { closeName, closeExec } from './commands/mod/moderation.js';
-import { addstockName, addstockExec } from './commands/admin/stock.js';
-import { stockName, stockExec } from './commands/admin/stock.js';
-import { rallName, rallExec } from './commands/admin/stock.js';
-import { backupName, backupExec } from './commands/admin/stock.js';
-import { name as servicesName, execute as servicesExec } from './commands/admin/services.js';
-import { name as sendName, execute as sendExec } from './commands/admin/send.js';
-import { name as webName, execute as webExec } from './commands/misc/web.js';
-import { name as giveawayName, execute as giveawayExec } from './commands/giveaway/giveaway.js';
-import { name as helpName, execute as helpExec } from './commands/help.js';
+import { loadCommands } from './loadCommands.js';
 
 const client = new Client({
   intents: [
@@ -49,29 +25,7 @@ const client = new Client({
 client.commands = new Collection();
 
 // Register prefix commands
-client.commands.set(genName, { execute: genExec });
-client.commands.set(profileName, { execute: profileExec });
-client.commands.set(verifyName, { execute: verifyExec });
-client.commands.set(vouchName, { execute: vouchExec });
-client.commands.set(rvouchName, { execute: rvouchExec });
-client.commands.set(leaderboardName, { execute: leaderboardExec });
-client.commands.set(banName, { execute: banExec });
-client.commands.set(kickName, { execute: kickExec });
-client.commands.set(muteName, { execute: muteExec });
-client.commands.set(unmuteName, { execute: unmuteExec });
-client.commands.set(warnName, { execute: warnExec });
-client.commands.set(purgeName, { execute: purgeExec });
-client.commands.set(announcementName, { execute: announcementExec });
-client.commands.set(closeName, { execute: closeExec });
-client.commands.set(addstockName, { execute: addstockExec });
-client.commands.set(stockName, { execute: stockExec });
-client.commands.set(rallName, { execute: rallExec });
-client.commands.set(backupName, { execute: backupExec });
-client.commands.set(servicesName, { execute: servicesExec });
-client.commands.set(sendName, { execute: sendExec });
-client.commands.set(webName, { execute: webExec });
-client.commands.set(giveawayName, { execute: giveawayExec });
-client.commands.set(helpName, { execute: helpExec });
+await loadCommands(client.commands);
 
 const PREFIX = '!';
 
