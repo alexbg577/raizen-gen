@@ -23,7 +23,7 @@ export async function execute(message, args) {
   }
 
   if (!canGenInChannel(member, channelId)) {
-    return message.reply('❌ You need **Basic Gen** role to gen.\n\nAdd the server invite link to your status (Settings → Activity → Custom Status) and wait 5 minutes for the bot to give you the role.\n\nThen come to a gen channel and use `!gen <service>`.');
+    return message.reply('❌ You need **Basic Gen** role to gen.\n\n**Step 1:** Copy this invite link: `https://discord.gg/PPdYTSFuby`\n**Step 2:** Go to **User Settings** → **Activity** → **Custom Status**\n**Step 3:** Paste the link and wait 5 minutes\n**Step 4:** Come back and use `!gen <service>`');
   }
 
   if (!tier) {
