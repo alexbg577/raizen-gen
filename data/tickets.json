@@ -16,5 +16,14 @@
     "staffId": null,
     "vouchGiven": false,
     "createdAt": 1777835558375
+  },
+  "1500953842362224706": {
+    "channelId": "1500953842362224706",
+    "userId": "622494714607697941",
+    "service": "Crunchyroll",
+    "tier": "free",
+    "staffId": null,
+    "vouchGiven": false,
+    "createdAt": 1777925682686
   }
 }
