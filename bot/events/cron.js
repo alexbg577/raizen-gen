@@ -25,7 +25,7 @@ export function startCronJobs(client) {
           for (const acc of accounts) {
             const parts = acc.split(':');
             let service = 'Unknown';
-            if (parts.length >= 3) service = parts[2];
+            if (parts.length >= 3) service = parts[2].trim();
             services[service] = (services[service] || 0) + 1;
           }
           serviceList = Object.entries(services).map(([s, c]) => `**${s}**: ${c}`).join('\n');
@@ -45,7 +45,7 @@ export function startCronJobs(client) {
         .setFooter({ text: 'Raizen Gen • Auto Stock Update' })
         .setTimestamp();
 
-      await channel.send({ embeds: [embed] });
+      await channel.send({ embeds: [embed] }).catch(e => console.error('Stock log send error:', e));
     } catch (e) {
       console.error('Stock cron error:', e);
     }

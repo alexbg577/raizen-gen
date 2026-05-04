@@ -13,10 +13,17 @@ export async function execute(message, args) {
   const member = message.member;
   const channelId = message.channel.id;
   const service = args[0];
-  const tier = getTierFromChannel(channelId);
-
   if (!service) {
     return message.reply('❌ Usage: `!gen <service>` (ex: `!gen Netflix`)');
+  }
+
+  const tier = getTierFromChannel(channelId);
+  if (!tier) {
+    return message.reply('❌ Use this command in a gen channel.');
+  }
+
+  if (!canGenInChannel(member, channelId)) {
+    return message.reply('❌ You need **Basic Gen** role to gen.\n\nAdd the server invite link to your status (Settings → Activity → Custom Status) and wait 5 minutes for the bot to give you the role.\n\nThen come to a gen channel and use `!gen <service>`.');
   }
 
   if (!tier) {
