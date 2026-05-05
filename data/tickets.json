@@ -16,5 +16,14 @@
     "staffId": null,
     "vouchGiven": false,
     "createdAt": 1777835558375
+  },
+  "1501294399903240314": {
+    "channelId": "1501294399903240314",
+    "userId": "1112314692258512926",
+    "service": "bin",
+    "tier": "free",
+    "staffId": null,
+    "vouchGiven": false,
+    "createdAt": 1778006877882
   }
 }
