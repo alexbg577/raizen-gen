@@ -16,5 +16,14 @@
     "staffId": null,
     "vouchGiven": false,
     "createdAt": 1777835558375
+  },
+  "1502357961610367156": {
+    "channelId": "1502357961610367156",
+    "userId": "1185185602023465012",
+    "service": "crunchy",
+    "tier": "free",
+    "staffId": null,
+    "vouchGiven": false,
+    "createdAt": 1778260450906
   }
 }
