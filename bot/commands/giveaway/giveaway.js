@@ -34,13 +34,15 @@ export async function execute(message, args) {
       .setFooter({ text: `Hosted by ${message.author.tag}`, iconURL: message.author.displayAvatarURL() })
       .setTimestamp(endsAt);
 
+    const msg = await message.channel.send({ embeds: [embed] });
+
     const btn = new ButtonBuilder()
       .setCustomId(`giveaway_enter_${msg.id}`)
       .setLabel('🎉 Enter Giveaway')
       .setStyle(ButtonStyle.Success);
 
     const row = new ActionRowBuilder().addComponents(btn);
-    const msg = await message.channel.send({ embeds: [embed], components: [row] });
+    await msg.edit({ embeds: [embed], components: [row] });
 
     await saveGiveaway({
       messageId: msg.id,
