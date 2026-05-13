@@ -43,6 +43,7 @@ export async function execute(message, args) {
     .setTitle('📖 Raizen Gen Help')
     .setDescription(`**${commands.size} commands available**\nUse \`!help <command>\` for details`)
     .setThumbnail('https://raizen-gen-web.onrender.com/images/logo.svg')
+    .setImage('https://raizen-gen-web.onrender.com/images/help-banner.svg')
     .setFooter({ text: 'Raizen Gen • Prefix: !', iconURL: 'https://raizen-gen-web.onrender.com/images/logo.svg' })
     .setTimestamp();
 

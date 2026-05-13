@@ -1,10 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 100">
   <defs>
     <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#5865F2"/>
       <stop offset="100%" stop-color="#57F287"/>
     </linearGradient>
   </defs>
-  <rect width="100" height="100" rx="20" fill="url(#g)"/>
-  <text x="50" y="68" font-family="Arial,sans-serif" font-size="50" font-weight="bold" fill="#fff" text-anchor="middle">RG</text>
+  <rect width="300" height="100" rx="16" fill="url(#g)"/>
+  <text x="30" y="62" font-family="Arial, sans-serif" font-size="36" font-weight="900" fill="#fff">RAIZEN</text>
+  <text x="190" y="62" font-family="Arial, sans-serif" font-size="36" font-weight="900" fill="#1a1a2e">GEN</text>
+  <rect x="30" y="75" width="120" height="3" fill="#fff" rx="1" opacity="0.3"/>
 </svg>

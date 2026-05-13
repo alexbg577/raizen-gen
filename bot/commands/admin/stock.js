@@ -109,6 +109,7 @@ export async function stockExec(message, args) {
     .setTitle('📦 Raizen Gen Stock')
     .setDescription(`**━━━━━━━━━━━━━━━━━━━━**\n${overview}\n**━━━━━━━━━━━━━━━━━━━━**\n━━ 📊 **Total:** ${total} accounts`)
     .setThumbnail('https://raizen-gen-web.onrender.com/images/logo.svg')
+    .setImage('https://raizen-gen-web.onrender.com/images/stock-banner.svg')
     .setFooter({ text: 'Raizen Gen • Stock System', iconURL: 'https://raizen-gen-web.onrender.com/images/logo.svg' })
     .setTimestamp();
 
