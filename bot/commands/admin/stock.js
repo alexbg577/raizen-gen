@@ -108,9 +108,9 @@ export async function stockExec(message, args) {
     .setColor(0x5865F2)
     .setTitle('📦 Raizen Gen Stock')
     .setDescription(`**━━━━━━━━━━━━━━━━━━━━**\n${overview}\n**━━━━━━━━━━━━━━━━━━━━**\n━━ 📊 **Total:** ${total} accounts`)
-    .setThumbnail('https://raizen-gen-web.onrender.com/images/logo.svg')
-    .setImage('https://raizen-gen-web.onrender.com/images/stock-banner.svg')
-    .setFooter({ text: 'Raizen Gen • Stock System', iconURL: 'https://raizen-gen-web.onrender.com/images/logo.svg' })
+    .setThumbnail('https://raizen-gen-web.onrender.com/images/logo.png')
+    .setImage('https://raizen-gen-web.onrender.com/images/stock-banner.png')
+    .setFooter({ text: 'Raizen Gen • Stock System', iconURL: 'https://raizen-gen-web.onrender.com/images/logo.png' })
     .setTimestamp();
 
   for (const t of tierData) {

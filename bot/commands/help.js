@@ -42,9 +42,9 @@ export async function execute(message, args) {
     .setColor(0x5865F2)
     .setTitle('📖 Raizen Gen Help')
     .setDescription(`**${commands.size} commands available**\nUse \`!help <command>\` for details`)
-    .setThumbnail('https://raizen-gen-web.onrender.com/images/logo.svg')
-    .setImage('https://raizen-gen-web.onrender.com/images/help-banner.svg')
-    .setFooter({ text: 'Raizen Gen • Prefix: !', iconURL: 'https://raizen-gen-web.onrender.com/images/logo.svg' })
+    .setThumbnail('https://raizen-gen-web.onrender.com/images/logo.png')
+    .setImage('https://raizen-gen-web.onrender.com/images/help-banner.png')
+    .setFooter({ text: 'Raizen Gen • Prefix: !', iconURL: 'https://raizen-gen-web.onrender.com/images/logo.png' })
     .setTimestamp();
 
   for (const [catName, cmdNames] of Object.entries(categories)) {
