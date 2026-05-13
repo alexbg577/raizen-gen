@@ -29,7 +29,7 @@ await loadCommands(client.commands);
 
 const PREFIX = '!';
 
-client.once('clientReady', async () => {
+client.once('ready', async () => {
   console.log(`✅ Logged in as ${client.user.tag}`);
   startCronJobs(client);
   await restoreGiveaways(client);
@@ -85,8 +85,8 @@ client.login(config.token);
 
 // Serveur HTTP minimal pour Render (health check)
 import http from 'http';
-const port = process.env.PORT || 3000;
+const healthPort = process.env.BOT_PORT || process.env.PORT || 3001;
 http.createServer((req, res) => {
   res.writeHead(200);
   res.end('OK');
-}).listen(port, () => console.log(`🌐 Health check server on port ${port}`));
+}).listen(healthPort, () => console.log(`🌐 Health check server on port ${healthPort}`));

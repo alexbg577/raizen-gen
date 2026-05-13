@@ -35,7 +35,7 @@ export async function execute(message, args) {
       .setTimestamp(endsAt);
 
     const btn = new ButtonBuilder()
-      .setCustomId(`giveaway_enter_${message.id}`)
+      .setCustomId(`giveaway_enter_${msg.id}`)
       .setLabel('🎉 Enter Giveaway')
       .setStyle(ButtonStyle.Success);
 
@@ -117,7 +117,7 @@ export async function endGiveaway(client, messageId) {
   g.ended = true;
   await saveGiveaway(g);
 
-  const guild = client.guilds.cache.get(process.env.GUILD_ID);
+  const guild = client.guilds.cache.get(config.guildId);
   if (!guild) return;
   
   const channel = guild.channels.cache.get(g.channelId);

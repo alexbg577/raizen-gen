@@ -25,7 +25,7 @@ export async function handleButton(interaction) {
     return interaction.showModal(modal);
   }
 
-  if (customId === 'giveaway_enter') {
+  if (customId.startsWith('giveaway_enter')) {
     const msgId = interaction.message.id;
     const giveaways = await getGiveaways();
     const g = giveaways[msgId];

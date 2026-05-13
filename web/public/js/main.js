@@ -1,7 +1,6 @@
 // Copy to clipboard
-function copyText(text) {
+function copyText(text, btn) {
   navigator.clipboard.writeText(text).then(() => {
-    const btn = event.target;
     btn.textContent = 'Copied!';
     btn.style.background = 'var(--accent)';
     setTimeout(() => { btn.textContent = 'Copy'; btn.style.background = ''; }, 2000);

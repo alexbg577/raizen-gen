@@ -1,7 +1,7 @@
 import cron from 'node-cron';
 import { EmbedBuilder } from 'discord.js';
 import { config } from '../../shared/config.js';
-import { getAllStockCounts } from '../utils/github.js';
+import { getStock } from '../utils/github.js';
 
 export function startCronJobs(client) {
   // Post stock every 2 hours (full details with services)

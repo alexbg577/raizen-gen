@@ -1,6 +1,7 @@
 import { EmbedBuilder } from 'discord.js';
 import { isAdmin } from '../../utils/permissions.js';
 import { getStock, popAccount } from '../../utils/github.js';
+import { sendLog, LogColors } from '../../utils/logger.js';
 
 export const name = 'send';
 

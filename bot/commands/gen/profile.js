@@ -1,6 +1,7 @@
 import { EmbedBuilder } from 'discord.js';
-import { isStaff } from '../../utils/permissions.js';
+import { isStaff, isAdmin, isMod } from '../../utils/permissions.js';
 import { getVouches, getUserVouches } from '../../utils/github.js';
+import { config } from '../../../shared/config.js';
 
 export const name = 'profile';
 

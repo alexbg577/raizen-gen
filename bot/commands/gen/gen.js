@@ -44,18 +44,6 @@ export async function execute(message, args) {
     });
   }
 
-  if (!canGenInChannel(member, channelId)) {
-    return message.reply('❌ You need **Basic Gen** role to gen.\n\n**Step 1:** Copy this invite link: `https://discord.gg/PPdYTSFuby`\n**Step 2:** Go to **User Settings** → **Activity** → **Custom Status**\n**Step 3:** Paste the link and wait 5 minutes\n**Step 4:** Come back and use `!gen <service>`');
-  }
-
-  if (!tier) {
-    return message.reply('❌ Use this command in a gen channel.');
-  }
-
-  if (!canGenInChannel(member, channelId)) {
-    return message.reply('❌ You don\'t have the required role to gen in this channel.');
-  }
-
   const count = await getStockCount(tier);
   if (count === 0) {
     return message.reply(`❌ No **${service}** accounts in stock for **${tier}** tier. Try again later.`);
@@ -63,7 +51,7 @@ export async function execute(message, args) {
 
   // Create ticket channel
   const guild = message.guild;
-  const ticketCategoryId = '1479080682784555134';
+  const ticketCategoryId = config.channels.ticket || '1479080682784555134';
 
   const ticketChannel = await guild.channels.create({
     name: `ticket-${member.user.username}-${service.toLowerCase()}`,

@@ -2,7 +2,8 @@ import { EmbedBuilder, PermissionFlagsBits, ChannelType } from 'discord.js';
 import { isAdmin, isMod, isStaff } from '../../utils/permissions.js';
 import { config } from '../../../shared/config.js';
 
-// Emoji list
+const afkUsers = new Map();
+
 export const name = 'afk';
 export async function execute(message, args) {
   const reason = args.join(' ') || 'AFK';

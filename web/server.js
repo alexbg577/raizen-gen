@@ -7,7 +7,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import multer from 'multer';
 import AdmZip from 'adm-zip';
-import { getAllStockCounts, getStockCount, popAccount, addStock, getVouches, getGiveaways } from '../bot/utils/github.js';
+import { getAllStockCounts, getStockCount, popAccount, getVouches, getGiveaways, saveGiveaway } from '../bot/utils/github.js';
 import { config } from '../shared/config.js';
 
 dotenv.config();

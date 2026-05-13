@@ -34,8 +34,9 @@
             </div>
             <div class="stat-box">
                 <i class="fas fa-calendar"></i>
-                <h3><t:<%= Math.floor(Date.now() / 1000) %>:R></h3>
+                <h3 id="memberSince"></h3>
                 <p>Member Since</p>
+                <script>document.getElementById('memberSince').textContent = new Date().toLocaleDateString();</script>
             </div>
         </div>
     </div>

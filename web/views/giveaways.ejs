@@ -49,9 +49,9 @@
                     <h3><%= g.prize %></h3>
                 </div>
                 <div class="giveaway-info">
-                    <p><i class="fas fa-user"></i> <strong>Host:</strong> <%- g.hostId %></p>
+                    <p><i class="fas fa-user"></i> <strong>Host:</strong> <%= g.hostId %></p>
                     <p><i class="fas fa-users"></i> <strong>Entries:</strong> <%= g.entries.length %></p>
-                    <p><i class="fas fa-clock"></i> <strong>Ends:</strong> <t:<%= Math.floor(g.endsAt / 1000) %>:R></p>
+                    <p><i class="fas fa-clock"></i> <strong>Ends:</strong> <span class="countdown" data-ends="<%= g.endsAt %>"></span></p>
                 </div>
                 <% if (!g.ended) { %>
                     <button class="btn-enter" onclick="enterGiveaway('<%= g.messageId %>')">
