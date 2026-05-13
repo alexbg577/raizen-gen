@@ -61,43 +61,62 @@ export async function addstockExec(message, args) {
   });
 }
 
+function makeBar(current, max, size = 10) {
+  const filled = max > 0 ? Math.round((current / max) * size) : 0;
+  return '█'.repeat(filled) + '░'.repeat(size - filled);
+}
+
+function formatServices(accounts) {
+  if (accounts.length === 0) return '┇ No accounts';
+  const services = {};
+  for (const acc of accounts) {
+    const parts = acc.split(':');
+    const s = parts.length >= 3 ? parts[2] : 'Unknown';
+    services[s] = (services[s] || 0) + 1;
+  }
+  return Object.entries(services)
+    .sort((a, b) => b[1] - a[1])
+    .map(([s, c]) => `┇ **${s}** ─ ${c}`)
+    .join('\n');
+}
+
+const TIER_META = {
+  free:    { emoji: '🟢', color: 0x57F287, label: 'Free' },
+  premium: { emoji: '🔵', color: 0x5865F2, label: 'Premium' },
+  booster: { emoji: '🟣', color: 0x9B59B6, label: 'Booster' },
+  extreme: { emoji: '🔴', color: 0xED4245, label: 'Extreme' },
+};
+
 export const stockName = 'stock';
 export async function stockExec(message, args) {
   const counts = await getAllStockCounts();
+  const total = Object.values(counts).reduce((a, b) => a + b, 0);
+  const maxCount = Math.max(...Object.values(counts), 1);
 
-  // Get services for each tier
-  const tiers = ['free', 'premium', 'booster', 'extreme'];
-  const fields = [];
-
-  for (const tier of tiers) {
+  const tierData = [];
+  for (const tier of ['free', 'premium', 'booster', 'extreme']) {
     const accounts = await getStock(tier);
-    let serviceList = 'No accounts';
-    if (accounts.length > 0) {
-      const services = {};
-      for (const acc of accounts) {
-        const parts = acc.split(':');
-        let service = 'Unknown';
-        if (parts.length >= 3) service = parts[2];
-        services[service] = (services[service] || 0) + 1;
-      }
-      serviceList = Object.entries(services).map(([s, c]) => `**${s}**: ${c}`).join('\n');
-    }
-    fields.push({
-      name: `${tier.charAt(0).toUpperCase() + tier.slice(1)} (${counts[tier]})`,
-      value: serviceList,
-      inline: false
-    });
+    tierData.push({ tier, accounts, count: counts[tier] });
   }
+
+  const overview = tierData.map(t => {
+    const m = TIER_META[t.tier];
+    return `${m.emoji} **${m.label}** ─ ${t.count} \`${makeBar(t.count, maxCount)}\``;
+  }).join('\n');
 
   const embed = new EmbedBuilder()
     .setColor(0x5865F2)
-    .setTitle('📦 Raizen Gen Stock Inventory')
-    .setDescription(`📊 **Total Accounts:** ${Object.values(counts).reduce((a, b) => a + b, 0)}\n\nHere are all available services by tier:`)
-    .addFields(fields)
+    .setTitle('📦 Raizen Gen Stock')
+    .setDescription(`**━━━━━━━━━━━━━━━━━━━━**\n${overview}\n**━━━━━━━━━━━━━━━━━━━━**\n━━ 📊 **Total:** ${total} accounts`)
     .setThumbnail('https://raizen-gen-web.onrender.com/images/logo.svg')
     .setFooter({ text: 'Raizen Gen • Stock System', iconURL: 'https://raizen-gen-web.onrender.com/images/logo.svg' })
-    .setTimestamp()
-    .setImage('https://raizen-gen-web.onrender.com/images/logo.svg')
+    .setTimestamp();
+
+  for (const t of tierData) {
+    const m = TIER_META[t.tier];
+    const svc = formatServices(t.accounts);
+    embed.addFields({ name: `${m.emoji} ${m.label}  ─  ${t.count}`, value: svc, inline: false });
+  }
 
   await message.reply({ embeds: [embed] });
 }
