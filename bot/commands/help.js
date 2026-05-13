@@ -1,4 +1,4 @@
-import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
+import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, AttachmentBuilder } from 'discord.js';
 
 export const name = 'help';
 
@@ -38,13 +38,16 @@ export async function execute(message, args) {
     '💬 Misc': ['say', 'esay', 'dm', 'afk', 'cowsay', 'rhyme', 'define', 'scramble', 'credit'],
   };
 
+  const banner = new AttachmentBuilder('./web/public/images/help-banner.png', { name: 'help-banner.png' });
+  const logoFile = new AttachmentBuilder('./web/public/images/logo.png', { name: 'logo.png' });
+
   const embed = new EmbedBuilder()
     .setColor(0x5865F2)
     .setTitle('📖 Raizen Gen Help')
     .setDescription(`**${commands.size} commands available**\nUse \`!help <command>\` for details`)
-    .setThumbnail('https://raizen-gen-web.onrender.com/images/logo.png')
-    .setImage('https://raizen-gen-web.onrender.com/images/help-banner.png')
-    .setFooter({ text: 'Raizen Gen • Prefix: !', iconURL: 'https://raizen-gen-web.onrender.com/images/logo.png' })
+    .setThumbnail('attachment://logo.png')
+    .setImage('attachment://help-banner.png')
+    .setFooter({ text: 'Raizen Gen • Prefix: !' })
     .setTimestamp();
 
   for (const [catName, cmdNames] of Object.entries(categories)) {
@@ -70,5 +73,5 @@ export async function execute(message, args) {
         .setURL('https://raizen-gen-web.onrender.com/docs')
     );
 
-  await message.reply({ embeds: [embed], components: [row] });
+  await message.reply({ embeds: [embed], components: [row], files: [banner, logoFile] });
 }

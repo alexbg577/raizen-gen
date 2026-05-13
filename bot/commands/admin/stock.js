@@ -104,13 +104,16 @@ export async function stockExec(message, args) {
     return `${m.emoji} **${m.label}** ─ ${t.count} \`${makeBar(t.count, maxCount)}\``;
   }).join('\n');
 
+  const banner = new AttachmentBuilder('./web/public/images/stock-banner.png', { name: 'stock-banner.png' });
+  const logoFile = new AttachmentBuilder('./web/public/images/logo.png', { name: 'logo.png' });
+
   const embed = new EmbedBuilder()
     .setColor(0x5865F2)
     .setTitle('📦 Raizen Gen Stock')
     .setDescription(`**━━━━━━━━━━━━━━━━━━━━**\n${overview}\n**━━━━━━━━━━━━━━━━━━━━**\n━━ 📊 **Total:** ${total} accounts`)
-    .setThumbnail('https://raizen-gen-web.onrender.com/images/logo.png')
-    .setImage('https://raizen-gen-web.onrender.com/images/stock-banner.png')
-    .setFooter({ text: 'Raizen Gen • Stock System', iconURL: 'https://raizen-gen-web.onrender.com/images/logo.png' })
+    .setThumbnail('attachment://logo.png')
+    .setImage('attachment://stock-banner.png')
+    .setFooter({ text: 'Raizen Gen • Stock System' })
     .setTimestamp();
 
   for (const t of tierData) {
@@ -119,7 +122,7 @@ export async function stockExec(message, args) {
     embed.addFields({ name: `${m.emoji} ${m.label}  ─  ${t.count}`, value: svc, inline: false });
   }
 
-  await message.reply({ embeds: [embed] });
+  await message.reply({ embeds: [embed], files: [banner, logoFile] });
 }
 
 export const rallName = 'rall';
