@@ -94,10 +94,10 @@ export async function stockExec(message, args) {
     .setTitle('📦 Raizen Gen Stock Inventory')
     .setDescription(`📊 **Total Accounts:** ${Object.values(counts).reduce((a, b) => a + b, 0)}\n\nHere are all available services by tier:`)
     .addFields(fields)
-    .setThumbnail('https://i.imgur.com/8xZq3eE.png') // Raizen Gen logo
-    .setFooter({ text: 'Raizen Gen • Stock System', iconURL: 'https://i.imgur.com/8xZq3eE.png' })
+    .setThumbnail('https://raizen-gen-web.onrender.com/images/logo.svg')
+    .setFooter({ text: 'Raizen Gen • Stock System', iconURL: 'https://raizen-gen-web.onrender.com/images/logo.svg' })
     .setTimestamp()
-    .setImage('https://i.imgur.com/8xZq3eE.png'); // Optional banner
+    .setImage('https://raizen-gen-web.onrender.com/images/logo.svg')
 
   await message.reply({ embeds: [embed] });
 }

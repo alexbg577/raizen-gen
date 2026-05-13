@@ -123,13 +123,20 @@ export async function handleModal(interaction) {
   if (interaction.customId === 'verify_modal') {
     const answer = interaction.fields.getTextInputValue('verify_answer').trim();
     if (answer === '4') {
-      const member = interaction.member;
-      await member.roles.add(config.roles.verified).catch(() => {});
-      await member.roles.remove(config.roles.unverified).catch(() => {});
-      return interaction.reply({
-        content: '✅ You are now verified! Welcome to **Raizen Gen**.',
-        ephemeral: true,
-      });
+      await interaction.deferReply({ ephemeral: true });
+      try {
+        const member = await interaction.guild.members.fetch(interaction.user.id);
+        await member.roles.add(config.roles.verified);
+        await member.roles.remove(config.roles.unverified);
+        return interaction.editReply({
+          content: '✅ You are now verified! Welcome to **Raizen Gen**.',
+        });
+      } catch (err) {
+        console.error('Verification role error:', err);
+        return interaction.editReply({
+          content: `❌ Verification failed: ${err.message}. Please contact a staff member.`,
+        });
+      }
     } else {
       return interaction.reply({ content: '❌ Wrong answer. Try again!', ephemeral: true });
     }
