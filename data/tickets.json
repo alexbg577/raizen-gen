@@ -34,5 +34,14 @@
     "staffId": null,
     "vouchGiven": false,
     "createdAt": 1778260457009
+  },
+  "1504554372972150895": {
+    "channelId": "1504554372972150895",
+    "userId": "1462133155623338270",
+    "service": "Roblox",
+    "tier": "free",
+    "staffId": null,
+    "vouchGiven": false,
+    "createdAt": 1778784115983
   }
 }
