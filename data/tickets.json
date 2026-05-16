@@ -43,5 +43,14 @@
     "staffId": null,
     "vouchGiven": false,
     "createdAt": 1778905851606
+  },
+  "1505065087587582082": {
+    "channelId": "1505065087587582082",
+    "userId": "1244687827061706824",
+    "service": "epic",
+    "tier": "free",
+    "staffId": null,
+    "vouchGiven": false,
+    "createdAt": 1778905880063
   }
 }
